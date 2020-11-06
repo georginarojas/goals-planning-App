@@ -1,0 +1,16 @@
+Functional requirements:
+
+>> Users (CRUD - create, read, update, delete)
+    Register
+    Save
+    Eliminate
+
+>> Users Password
+    Register
+    Save
+    Change
+    Eliminate
+
+>> Task
+
+>> Goals
