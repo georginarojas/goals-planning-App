@@ -1,0 +1,16 @@
+npm init -y // create the package.json file
+
+
+>> Dependencies
+
+npm install express
+
+npm install -D nodemon // for re-run the js
+
+npm install mongoose // for DB
+
+npm install require-dir // help to import all the models of DB
+
+>> Command
+
+npm run dev
