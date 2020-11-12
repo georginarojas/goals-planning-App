@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import './form.css';
-import Password from './password';
-import axios from "axios";
 
+import Password from "./password";
+// import Verify from "./verifyUser";
+import api from "../../services/api";
+
+import "./form.css";
 
 class UserForm extends Component {
   constructor(props) {
@@ -13,14 +15,46 @@ class UserForm extends Component {
       age: null,
       password: null,
 
-      type:"input",
-
+      type: "input",
     };
 
     this.handleChange = this.handleChange.bind(this);
+    this.checkUsername = this.checkUsername.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
 
     this.showHide = this.showHide.bind(this);
+   
+  }
+
+  async fetchUsername(username) {
+    try {
+      const response = await api.get(`/username/${username}`);
+      return {
+        error: false,
+        data: response.data,
+      };
+    } catch (error) {
+      return {
+        error: true,
+        data: null,
+      };
+    }
+  }
+
+  async checkUsername(event) {
+    event.preventDefault();
+    console.log(this.state.username);
+    const username= this.state.username;
+    const response = await this.fetchUsername(username);
+    if(!response.error) {
+      if (response.data === null) {
+        console.log("não tem esse nome de fdp");
+      } else {
+        console.log("encontramos um fdp com esse nome");
+      }
+    } else {
+      console.log("deu erro");
+    }
   }
 
   handleChange(event) {
@@ -29,16 +63,19 @@ class UserForm extends Component {
     this.setState({ [name]: value });
   }
 
-  async handleSubmit(event) {                
+  async handleSubmit(event) {
     event.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8080/api/user",
-      {name: this.state.name, username: this.state.username, age: this.state.age, password: this.state.password});
+      const response = await api.post("/user", {
+        name: this.state.name,
+        username: this.state.username,
+        age: this.state.age,
+        password: this.state.password,
+      });
       console.log(response.data);
-    } catch(error){
+    } catch (error) {
       alert("Was not possible to make the register");
       console.log(error);
-
     }
   }
 
@@ -46,23 +83,24 @@ class UserForm extends Component {
     event.preventDefault();
     event.stopPropagation();
     this.setState({
-        type: this.state.type === 'input'? 'password': 'input'
-    })
+      type: this.state.type === "input" ? "password" : "input",
+    });
   }
 
-
   render() {
-    const {password} = this.state;
+    const { password } = this.state;
+
     return (
       <form action="save-user" method="post" onSubmit={this.handleSubmit}>
         <div className="input-block">
           <p>Please enter the next data:</p>
         </div>
         <div className="input-block">
-          <input 
+          <input
             id="name"
-            type='text'
-            name="name" required
+            type="text"
+            name="name"
+            required
             placeholder="Name"
             onChange={this.handleChange}
           />
@@ -71,17 +109,20 @@ class UserForm extends Component {
           <input
             id="username"
             type="text"
-            name="username" required
+            name="username"
+            required
             placeholder="User name"
             onChange={this.handleChange}
+            onBlur={this.checkUsername}
           />
         </div>
         <div className="input-block">
-          <input 
-            id="age" 
-            type="text" 
-            name="age" required
-            placeholder="Age" 
+          <input
+            id="age"
+            type="text"
+            name="age"
+            required
+            placeholder="Age"
             onChange={this.handleChange}
           />
         </div>
@@ -89,31 +130,34 @@ class UserForm extends Component {
           <input
             id="password"
             type={this.state.type}
-            name="password" required
+            name="password"
+            required
             autoComplete="off"
             placeholder="Password"
             onChange={this.handleChange}
           />
           {
-            //password != null ? <Password password={password} /> : null 
+            //password != null ? <Password password={password} /> : null
             password && <Password password={password} />
           }
-          
         </div>
         <div className="input-block">
-          <input 
+          <input
             id="passwordConf"
             type={this.state.type}
-            name="passwordConf" required
+            name="passwordConf"
+            required
             autoComplete="off"
             placeholder="Confirm password"
           />
-          <span onClick={this.showHide}> 
-            {this.state.type === 'input'? 'Hide': 'Show'}
+          <span onClick={this.showHide}>
+            {this.state.type === "input" ? "Hide" : "Show"}
           </span>
-        </div>        
+        </div>
         <div>
-         <button type="submit" className="primary-button">Sing up</button>
+          <button type="submit" className="primary-button">
+            Sing up
+          </button>
         </div>
       </form>
     );
