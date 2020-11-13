@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import{FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import{faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
 
-import Password from "./password";
+import PasswordStrengthMeter from "../../components/passwordStrengthMeter";
 import api from "../../services/api";
 
 import "./form.css";
@@ -92,7 +92,6 @@ class UserForm extends Component {
 
   togglePassword = event => {
     this.setState({isRevealPassword: !this.state.isRevealPassword});
-      console.log("togglePassword");
   }
 
   render() {
@@ -153,10 +152,10 @@ class UserForm extends Component {
               }
           </span>
 
-          {/* {
+          {
             //password != null ? <Password password={password} /> : null
-            password && <Password password={password} />
-          } */}
+            password && <PasswordStrengthMeter password={password} />
+          }
 
         </div>
         <div className="input-block">
