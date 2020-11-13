@@ -10,6 +10,8 @@ form{
 
 .input-block + .input-block{
     margin-top: 2.4rem;
+    position: relative;
+    /* display: inline; */
 }
 
 .input-block label{
@@ -33,3 +35,20 @@ form{
     border: 1px solid red;
 } */
 
+.input-block .customIcon {
+    position: absolute;
+    top: 8px;
+    left: 10px;
+    cursor: pointer;
+    
+    display: flex;
+    align-items: left;
+    justify-content: center;
+    text-align: left; 
+
+}
+
+.input-block .customIcon{
+    left: auto;
+    right: 10px;
+}

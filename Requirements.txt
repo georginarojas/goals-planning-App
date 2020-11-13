@@ -1,15 +1,19 @@
 Functional requirements:
 
->> Users (CRUD - create, read, update, delete)
-    Register
-    Save
-    Eliminate
 
->> Users Password
-    Register
-    Save
-    Change
-    Eliminate
+>> Users 
+    attribute: {
+        name
+        username
+        age
+        password
+    }
+    methods CRUD 
+    * Create
+    * Read
+    * Update
+    * Delete
+    
 
 >> Task
 

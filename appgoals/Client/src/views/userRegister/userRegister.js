@@ -1,7 +1,8 @@
 import React, { Component } from "react";
+import{FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import{faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
 
 import Password from "./password";
-// import Verify from "./verifyUser";
 import api from "../../services/api";
 
 import "./form.css";
@@ -16,13 +17,17 @@ class UserForm extends Component {
       password: null,
 
       type: "input",
+      isRevealPassword: false
+
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.checkUsername = this.checkUsername.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
 
-    this.showHide = this.showHide.bind(this);
+    this.passwordOneRef = React.createRef();
+    this.passwordTwoRef = React.createRef();
+    this.iconRevealPasswordRef = React.createRef();
    
   }
 
@@ -72,23 +77,26 @@ class UserForm extends Component {
         age: this.state.age,
         password: this.state.password,
       });
-      console.log(response.data);
+      if(response.data === null){
+        alert("Was not possible to make the register, this user exits");
+      } else {
+        alert(`User ${response.data.name} was created with success`)
+        console.log(response.data);
+      }
+
     } catch (error) {
       alert("Was not possible to make the register");
       console.log(error);
     }
   }
 
-  showHide(event) {
-    event.preventDefault();
-    event.stopPropagation();
-    this.setState({
-      type: this.state.type === "input" ? "password" : "input",
-    });
+  togglePassword = event => {
+    this.setState({isRevealPassword: !this.state.isRevealPassword});
+      console.log("togglePassword");
   }
 
   render() {
-    const { password } = this.state;
+    const { password, isRevealPassword} = this.state;
 
     return (
       <form action="save-user" method="post" onSubmit={this.handleSubmit}>
@@ -129,30 +137,38 @@ class UserForm extends Component {
         <div className="input-block">
           <input
             id="password"
-            type={this.state.type}
+            type={isRevealPassword? "text": "password"}
             name="password"
             required
             autoComplete="off"
             placeholder="Password"
             onChange={this.handleChange}
+            ref={this.passwordOneRef}
           />
-          {
+          <span onClick={this.togglePassword} ref={this.iconRevealPasswordRef} className="customIcon"> 
+              {
+              isRevealPassword? 
+              <FontAwesomeIcon icon={faEye} /> : 
+              <FontAwesomeIcon icon={faEyeSlash}/>
+              }
+          </span>
+
+          {/* {
             //password != null ? <Password password={password} /> : null
             password && <Password password={password} />
-          }
+          } */}
+
         </div>
         <div className="input-block">
           <input
             id="passwordConf"
-            type={this.state.type}
+            type={isRevealPassword? "text" : "password"}
             name="passwordConf"
             required
             autoComplete="off"
             placeholder="Confirm password"
+            ref={this.passwordTwoRef}
           />
-          <span onClick={this.showHide}>
-            {this.state.type === "input" ? "Hide" : "Show"}
-          </span>
         </div>
         <div>
           <button type="submit" className="primary-button">

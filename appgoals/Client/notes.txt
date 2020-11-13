@@ -3,6 +3,13 @@ npm install -g create-react-app // does all the process of  code transpilation
 
 create-react-app <project name>
 
+
+Dependencies
+npm i --save @fortawesome/fontawesome-svg-core \
+              @fortawesome/free-solid-svg-icons \
+              @fortawesome/react-fontawesome
+
+Run client project.
 # with npm
 npm run start
 

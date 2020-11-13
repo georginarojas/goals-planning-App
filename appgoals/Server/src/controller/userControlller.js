@@ -38,8 +38,7 @@ module.exports = {
       const user = await User.create(req.body);
       return res.json(user);
     } else {
-      console.error("Sorry this user exists");
-      return null;
+      return res.json(null);
     }
   },
 
