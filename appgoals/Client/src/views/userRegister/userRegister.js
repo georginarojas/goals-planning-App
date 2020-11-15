@@ -13,17 +13,20 @@ class UserForm extends Component {
     this.state = {
       name: "",
       username: "",
+      email: "",
       age: null,
       password: null,
+      passwordConf: null,
 
-      type: "input",
-      isRevealPassword: false
+      isRevealPassword: false,
+      isSamePassword: false
 
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.checkUsername = this.checkUsername.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.comparePassword = this.comparePassword.bind(this);
 
     this.passwordOneRef = React.createRef();
     this.passwordTwoRef = React.createRef();
@@ -70,24 +73,47 @@ class UserForm extends Component {
 
   async handleSubmit(event) {
     event.preventDefault();
-    try {
-      const response = await api.post("/user", {
-        name: this.state.name,
-        username: this.state.username,
-        age: this.state.age,
-        password: this.state.password,
-      });
-      if(response.data === null){
-        alert("Was not possible to make the register, this user exits");
-      } else {
-        alert(`User ${response.data.name} was created with success`)
-        console.log(response.data);
-      }
+    console.log("Submit " + this.state.isSamePassword);
+    if (this.state.isSamePassword === true) {
+      try {
+        const response = await api.post("/user", {
+          name: this.state.name,
+          username: this.state.username,
+          email: this.state.email,
+          age: this.state.age,
+          password: this.state.password,
+        });
+        if(response.data === null){
+          alert("Was not possible to make the register, this user exits");
+        } else {
+          alert(`User ${response.data.name} was created with success`)
+          console.log(response.data);
+        }
 
-    } catch (error) {
-      alert("Was not possible to make the register");
-      console.log(error);
+      } catch (error) {
+        alert("Was not possible to make the register");
+        console.log(error);
+      }
+    } else {
+      alert("Was not possible to make the register, different password");
+      return {
+       error: true
+      };
     }
+  }
+
+  comparePassword(event){
+    event.preventDefault();
+    if(this.state.passwordConf !== null) {
+      if (this.state.passwordConf === this.state.password) {
+        this.setState({isSamePassword: !this.state.isSamePassword});
+      } else {
+        alert(`The passwords: "${this.state.password}" and "${this.state.passwordConf}" are not equals`);
+      }
+    } else {
+      alert("Please confirm the password");
+    }
+    
   }
 
   togglePassword = event => {
@@ -121,6 +147,16 @@ class UserForm extends Component {
             placeholder="User name"
             onChange={this.handleChange}
             onBlur={this.checkUsername}
+          />
+        </div>
+        <div className="input-block">
+          <input 
+          id="email"
+          type="text"
+          name="email"
+          required
+          placeholder="E-mail"
+          onChange={this.handleChange}
           />
         </div>
         <div className="input-block">
@@ -166,8 +202,16 @@ class UserForm extends Component {
             required
             autoComplete="off"
             placeholder="Confirm password"
-            ref={this.passwordTwoRef}
+            onChange={this.handleChange}
+            onBlur={this.comparePassword}            
           />
+          {/* <span onClick={this.togglePassword} ref={this.iconRevealPasswordRef} className="customIcon"> 
+              {
+              isRevealPassword? 
+              <FontAwesomeIcon icon={faEye} /> : 
+              <FontAwesomeIcon icon={faEyeSlash}/>
+              }
+          </span> */}
         </div>
         <div>
           <button type="submit" className="primary-button">
