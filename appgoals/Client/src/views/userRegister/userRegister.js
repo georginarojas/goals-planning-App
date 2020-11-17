@@ -19,7 +19,8 @@ class UserForm extends Component {
       passwordConf: null,
 
       isRevealPassword: false,
-      isSamePassword: false
+      isSamePassword: false,
+      isEmail: false
 
     };
 
@@ -28,6 +29,8 @@ class UserForm extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.comparePassword = this.comparePassword.bind(this);
 
+    this.validateEmail = this.validateEmail.bind(this);
+    
     this.passwordOneRef = React.createRef();
     this.passwordTwoRef = React.createRef();
     this.iconRevealPasswordRef = React.createRef();
@@ -47,6 +50,22 @@ class UserForm extends Component {
         data: null,
       };
     }
+  }
+
+  async fetchEmail(email){
+    try {
+      const response = await api.get(`/username/${email}`);
+      return  {
+        error: false,
+        data: response.data,
+      };
+    } catch (error) {
+      return{
+        error: true,
+        data: null,
+      }
+    }
+
   }
 
   async checkUsername(event) {
@@ -120,6 +139,26 @@ class UserForm extends Component {
     this.setState({isRevealPassword: !this.state.isRevealPassword});
   }
 
+  validateEmail(event) {
+    event.preventDefault();
+    const email = this.state.email;
+
+    let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+
+    if(re.test(email) ){
+      this.setState({email: this.state.email});
+      console.log("OK "+ email);
+      
+    } else {
+      this.setState({isEmail: !this.state.isEmail});
+      console.log("Is not a email valid");
+      alert("Plaese insert a valid Email");
+    }
+    
+  }
+
+
   render() {
     const { password, isRevealPassword} = this.state;
 
@@ -152,11 +191,12 @@ class UserForm extends Component {
         <div className="input-block">
           <input 
           id="email"
-          type="text"
+          type="email"
           name="email"
           required
           placeholder="E-mail"
           onChange={this.handleChange}
+          onBlur={this.validateEmail}
           />
         </div>
         <div className="input-block">

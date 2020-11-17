@@ -6,6 +6,11 @@ async function findUsername(username) {
   return user;
 }
 
+async function findData(data){
+  const user = await User.find(data);
+  return user;
+}
+
 async function findName(name) {
   return await User.findOne({ name }).exec();
 }
@@ -23,11 +28,46 @@ module.exports = {
     return res.json(user);
   },
 
-  async query(req, res) {
-    const username = req.params.username;
-    const user = await findUsername(username);
+  // async query(req, res) {
+  //   const username = req.params.username;
+  //   const user = await findUsername(username);
 
-    return res.json(user);
+  //   return res.json(user);
+  // },
+
+  async query(req, res) {
+    try{
+    const {search_field, search_value} = req.query;
+
+    const data = {};
+    if(search_field !== '' && search_value !== ''){
+      data[search_field] = search_value;
+    }
+    console.log("::data::", data);
+    const user = await findData(data);
+
+    console.log(">>>> User: ", user.length);
+
+    if (!user || user.length === 0) {
+      return res.status(404).json({
+        status: 'failure',
+        message: `User with the given ${search_field} : ${search_value} not found`,
+      });
+
+    } else {
+
+    res.status(200).json({
+      status: 'success',
+      data: user
+    });
+    }
+    // return res.json(user)
+    } catch (error) {
+      res.status(500).json({
+        status: 'failure',
+        error: error.message
+      });
+    }
   },
 
   async store(req, res) {

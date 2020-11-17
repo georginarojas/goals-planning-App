@@ -5,9 +5,10 @@ const UserControlller = require('./controller/userControlller');
 
 
 routes.get('/user', UserControlller.index);
+routes.get('/user/search', UserControlller.query);
 routes.get('/user/:id', UserControlller.show);
 
-routes.get('/username/:username', UserControlller.query);
+// routes.get('/username/:username', UserControlller.query);
 
 routes.post('/user', UserControlller.store);
 routes.put('/user/:id', UserControlller.update);
