@@ -37,24 +37,9 @@ class UserForm extends Component {
    
   }
 
-  async fetchUsername(username) {
+  async fetchData(field, value){
     try {
-      const response = await api.get(`/username/${username}`);
-      return {
-        error: false,
-        data: response.data,
-      };
-    } catch (error) {
-      return {
-        error: true,
-        data: null,
-      };
-    }
-  }
-
-  async fetchEmail(email){
-    try {
-      const response = await api.get(`/username/${email}`);
+      const response = await api.get(`/user/search?search_field=${field}&search_value=${value}`);
       return  {
         error: false,
         data: response.data,
@@ -65,22 +50,39 @@ class UserForm extends Component {
         data: null,
       }
     }
-
   }
 
   async checkUsername(event) {
     event.preventDefault();
-    console.log(this.state.username);
     const username= this.state.username;
-    const response = await this.fetchUsername(username);
+    const field = "username";
+    const response = await this.fetchData(field, username);
+
     if(!response.error) {
-      if (response.data === null) {
+      if (response.data.length === 0) {
         console.log("não tem esse nome de fdp");
       } else {
         console.log("encontramos um fdp com esse nome");
       }
     } else {
       console.log("deu erro");
+    }
+  }
+
+  async checkEmail(event){
+    event.preventDefault();
+    const email = this.state.email;
+    const field = "email";
+    const response = await this.fetchData(field,email);
+
+    if(!response.error) {
+      if(response.data.length === 0){
+        console.log("This email don't exist is OK");
+      } else {
+        console.log("This email exist WRONG");
+      }
+    } else {
+      console.log("ERROR");
     }
   }
 
@@ -93,7 +95,7 @@ class UserForm extends Component {
   async handleSubmit(event) {
     event.preventDefault();
     console.log("Submit " + this.state.isSamePassword);
-    if (this.state.isSamePassword === true) {
+    if (this.state.isSamePassword && this.state.isEmail) {
       try {
         const response = await api.post("/user", {
           name: this.state.name,
@@ -139,23 +141,26 @@ class UserForm extends Component {
     this.setState({isRevealPassword: !this.state.isRevealPassword});
   }
 
-  validateEmail(event) {
+  async validateEmail(event) {
     event.preventDefault();
     const email = this.state.email;
+    const field = "email";
 
     let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-
     if(re.test(email) ){
       this.setState({email: this.state.email});
-      console.log("OK "+ email);
+      this.setState({isEmail: !this.state.isEmail});
+      const response = await this.checkEmail(event);
+
+      console.log(`Is a email ${this.state.email} , ${this.state.isEmail}`);
+
       
     } else {
-      this.setState({isEmail: !this.state.isEmail});
+      // this.setState({isEmail: !this.state.isEmail});
       console.log("Is not a email valid");
       alert("Plaese insert a valid Email");
     }
-    
   }
 
 
