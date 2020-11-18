@@ -1,18 +1,19 @@
 const mongoose = require("mongoose");
 const User = mongoose.model("User");
 
-async function findUsername(username) {
-  const user = await User.findOne({ username }).exec();
-  return user;
-}
 
 async function findData(data){
   const user = await User.find(data);
   return user;
 }
 
-async function findName(name) {
-  return await User.findOne({ name }).exec();
+async function findUsername(username) {
+  const user = await User.findOne({ username }).exec();
+  return user;
+}
+
+async function findEmail(email) {
+  return await User.findOne({ email }).exec();
 }
 
 module.exports = {
@@ -28,13 +29,6 @@ module.exports = {
     return res.json(user);
   },
 
-  // async query(req, res) {
-  //   const username = req.params.username;
-  //   const user = await findUsername(username);
-
-  //   return res.json(user);
-  // },
-
   async query(req, res) {
     try{
     const {search_field, search_value} = req.query;
@@ -43,25 +37,24 @@ module.exports = {
     if(search_field !== '' && search_value !== ''){
       data[search_field] = search_value;
     }
-    console.log("::data::", data);
+
     const user = await findData(data);
 
-    console.log(">>>> User: ", user.length);
+    // if (!user || user.length === 0) {
+    //   return res.status(404).json({
+    //     status: 'failure',
+    //     data: user,
+    //     message: `User with the given ${search_field} : ${search_value} not found`,
+    //   });
 
-    if (!user || user.length === 0) {
-      return res.status(404).json({
-        status: 'failure',
-        message: `User with the given ${search_field} : ${search_value} not found`,
-      });
+    // } else {
 
-    } else {
-
-    res.status(200).json({
-      status: 'success',
-      data: user
-    });
-    }
-    // return res.json(user)
+    // res.status(200).json({
+    //   status: 'success',
+    //   data: user
+    // });
+    // }
+    return res.json(user)
     } catch (error) {
       res.status(500).json({
         status: 'failure',
@@ -71,14 +64,28 @@ module.exports = {
   },
 
   async store(req, res) {
-    const usernameObj = await findUsername(req.body.username);
-    const nameObj = await findName(req.body.name);
+    try{
+      const usernameObj = await findUsername(req.body.username);
+      const emailObj = await findEmail(req.body.email);
 
-    if (usernameObj === null && nameObj === null) {
-      const user = await User.create(req.body);
-      return res.json(user);
-    } else {
-      return res.json(null);
+      console.log("username ", usernameObj);
+      console.log("email ", emailObj)
+
+      if (usernameObj === null && emailObj === null) {
+        const user = await User.create(req.body);
+        // return res.json(user);
+        return res.status(200).json({
+          status:'success',
+          data: user
+        })
+      } else {
+        return res.json(null);
+      }
+    } catch (error) {
+      res.status(500).json({
+        status: 'failure',
+        error: error.message
+      })
     }
   },
 
