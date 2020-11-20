@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import{FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import{faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
+import zxcvbn from "zxcvbn";
 
 import PasswordStrengthMeter from "../../components/passwordStrengthMeter";
 import api from "../../services/api";
@@ -18,6 +19,8 @@ class UserForm extends Component {
       password: null,
       passwordConf: null,
 
+      scorePassword: null,
+      validPassword: false,
       isRevealPassword: false,
       isSamePassword: false,
       isEmail: false
@@ -28,6 +31,7 @@ class UserForm extends Component {
     this.checkUsername = this.checkUsername.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.comparePassword = this.comparePassword.bind(this);
+    this.validatePassword = this.validatePassword.bind(this);
 
     this.validateEmail = this.validateEmail.bind(this);
     
@@ -90,12 +94,18 @@ class UserForm extends Component {
     let name = event.target.name;
     let value = event.target.value;
     this.setState({ [name]: value });
+
+    if(name === "password") {
+      const scorePassword = zxcvbn(value, [this.state.username]);
+      console.log("scorePassword Obj ", scorePassword);
+      this.setState({scorePassword: scorePassword.score}); 
+    }
+
   }
 
   async handleSubmit(event) {
     event.preventDefault();
-    console.log("Submit " + this.state.isSamePassword);
-    if (this.state.isSamePassword && this.state.isEmail) {
+    if (this.state.isSamePassword && this.state.isEmail && this.validPassword) {
       try {
         const response = await api.post("/user", {
           name: this.state.name,
@@ -123,8 +133,20 @@ class UserForm extends Component {
     }
   }
 
+  validatePassword(event){
+    event.preventDefault();
+    console.log("scorePassword ", this.state.scorePassword);
+    if(this.state.scorePassword >= 2){
+      this.setState({validPassword: !this.state.validPassword});
+      console.log("Valid password");
+    } else{
+      console.log("Invalid password");
+    }
+  }
+
   comparePassword(event){
     event.preventDefault();
+    console.log("scorePassword ", this.state.scorePassword);
     if(this.state.passwordConf !== null) {
       if (this.state.passwordConf === this.state.password) {
         this.setState({isSamePassword: !this.state.isSamePassword});
@@ -224,6 +246,7 @@ class UserForm extends Component {
             placeholder="Password"
             onChange={this.handleChange}
             ref={this.passwordOneRef}
+            onBlur={this.validatePassword}
           />
           <span onClick={this.togglePassword} ref={this.iconRevealPasswordRef} className="customIcon"> 
               {
