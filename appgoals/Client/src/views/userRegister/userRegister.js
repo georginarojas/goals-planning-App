@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import{FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import{faEye, faEyeSlash} from "@fortawesome/free-solid-svg-icons";
 import zxcvbn from "zxcvbn";
 
-import PasswordStrengthMeter from "../../components/passwordStrengthMeter";
+import Input from "../../components/input";
+import PasswordRegister from "../../components/passwordRegister";
+
 import api from "../../services/api";
 
 import "./form.css";
@@ -17,11 +17,10 @@ class UserForm extends Component {
       email: "",
       age: null,
       password: null,
-      passwordConf: null,
+      passwordConfirm: null,
 
       scorePassword: null,
       validPassword: false,
-      isRevealPassword: false,
       isSamePassword: false,
       isEmail: false
 
@@ -32,13 +31,7 @@ class UserForm extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.comparePassword = this.comparePassword.bind(this);
     this.validatePassword = this.validatePassword.bind(this);
-
     this.validateEmail = this.validateEmail.bind(this);
-    
-    this.passwordOneRef = React.createRef();
-    this.passwordTwoRef = React.createRef();
-    this.iconRevealPasswordRef = React.createRef();
-   
   }
 
   async fetchData(field, value){
@@ -105,7 +98,9 @@ class UserForm extends Component {
 
   async handleSubmit(event) {
     event.preventDefault();
-    if (this.state.isSamePassword && this.state.isEmail && this.validPassword) {
+    let { isSamePassword, isEmail, validPassword} = this.state;
+
+    if (isSamePassword && isEmail && validPassword) {
       try {
         const response = await api.post("/user", {
           name: this.state.name,
@@ -135,7 +130,6 @@ class UserForm extends Component {
 
   validatePassword(event){
     event.preventDefault();
-    console.log("scorePassword ", this.state.scorePassword);
     if(this.state.scorePassword >= 2){
       this.setState({validPassword: !this.state.validPassword});
       console.log("Valid password");
@@ -146,12 +140,11 @@ class UserForm extends Component {
 
   comparePassword(event){
     event.preventDefault();
-    console.log("scorePassword ", this.state.scorePassword);
-    if(this.state.passwordConf !== null) {
-      if (this.state.passwordConf === this.state.password) {
+    if(this.state.passwordConfirm !== null) {
+      if (this.state.passwordConfirm === this.state.password) {
         this.setState({isSamePassword: !this.state.isSamePassword});
       } else {
-        alert(`The passwords: "${this.state.password}" and "${this.state.passwordConf}" are not equals`);
+        alert(`The passwords: "${this.state.password}" and "${this.state.passwordConfirm}" are not equals`);
       }
     } else {
       alert("Please confirm the password");
@@ -159,27 +152,20 @@ class UserForm extends Component {
     
   }
 
-  togglePassword = event => {
-    this.setState({isRevealPassword: !this.state.isRevealPassword});
-  }
-
   async validateEmail(event) {
     event.preventDefault();
     const email = this.state.email;
-    const field = "email";
 
     let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     if(re.test(email) ){
       this.setState({email: this.state.email});
-      this.setState({isEmail: !this.state.isEmail});
+      this.setState({isEmail: true});
       const response = await this.checkEmail(event);
-
-      console.log(`Is a email ${this.state.email} , ${this.state.isEmail}`);
-
+      console.log(">>>>>> ", this.state.isEmail);
       
     } else {
-      // this.setState({isEmail: !this.state.isEmail});
+      this.setState({isEmail: false});
       console.log("Is not a email valid");
       alert("Plaese insert a valid Email");
     }
@@ -187,100 +173,64 @@ class UserForm extends Component {
 
 
   render() {
-    const { password, isRevealPassword} = this.state;
+    const { password} = this.state;
 
     return (
       <form action="save-user" method="post" onSubmit={this.handleSubmit}>
         <div className="input-block">
           <p>Please enter the next data:</p>
         </div>
-        <div className="input-block">
-          <input
-            id="name"
-            type="text"
-            name="name"
-            required
-            placeholder="Name"
-            onChange={this.handleChange}
-          />
-        </div>
-        <div className="input-block">
-          <input
-            id="username"
-            type="text"
-            name="username"
-            required
-            placeholder="User name"
-            onChange={this.handleChange}
-            onBlur={this.checkUsername}
-          />
-        </div>
-        <div className="input-block">
-          <input 
-          id="email"
-          type="email"
-          name="email"
-          required
-          placeholder="E-mail"
+
+        < Input 
+          id={'name'}
+          type={'text'}
+          name={'name'}
+          placeholder={"Name"}
+          onChange={this.handleChange}
+        />
+
+        < Input
+          id={"username"}
+          type={"text"}
+          name={"username"}
+          placeholder={"User name"}
+          onChange={this.handleChange}
+          onBlur={this.checkUsername}
+        />
+
+        <Input 
+          id={'email'}
+          type={'email'}
+          name={'email'}
+          placeholder={'E-mail'}
           onChange={this.handleChange}
           onBlur={this.validateEmail}
-          />
-        </div>
-        <div className="input-block">
-          <input
-            id="age"
-            type="text"
-            name="age"
-            required
-            placeholder="Age"
-            onChange={this.handleChange}
-          />
-        </div>
-        <div className="input-block">
-          <input
-            id="password"
-            type={isRevealPassword? "text": "password"}
-            name="password"
-            required
-            autoComplete="off"
-            placeholder="Password"
-            onChange={this.handleChange}
-            ref={this.passwordOneRef}
-            onBlur={this.validatePassword}
-          />
-          <span onClick={this.togglePassword} ref={this.iconRevealPasswordRef} className="customIcon"> 
-              {
-              isRevealPassword? 
-              <FontAwesomeIcon icon={faEye} /> : 
-              <FontAwesomeIcon icon={faEyeSlash}/>
-              }
-          </span>
+        />
 
-          {
-            //password != null ? <Password password={password} /> : null
-            password && <PasswordStrengthMeter password={password} />
-          }
+        <Input 
+          id={'age'}
+          type={'text'}
+          name={'age'}
+          placeholder={'Age'}
+          onChange={this.handleChange}
+        />
 
-        </div>
-        <div className="input-block">
-          <input
-            id="passwordConf"
-            type={isRevealPassword? "text" : "password"}
-            name="passwordConf"
-            required
-            autoComplete="off"
-            placeholder="Confirm password"
-            onChange={this.handleChange}
-            onBlur={this.comparePassword}            
-          />
-          {/* <span onClick={this.togglePassword} ref={this.iconRevealPasswordRef} className="customIcon"> 
-              {
-              isRevealPassword? 
-              <FontAwesomeIcon icon={faEye} /> : 
-              <FontAwesomeIcon icon={faEyeSlash}/>
-              }
-          </span> */}
-        </div>
+        <PasswordRegister
+          id={'password'}
+          name={'password'}
+          placeholder={'Password'}
+          onChange={this.handleChange}
+          onBlur={this.validatePassword}
+          password={password} 
+        />
+
+        <PasswordRegister 
+          id={'passwordConfirm'}
+          name={'passwordConfirm'}
+          placeholder={'Password confirm'}
+          onChange={this.handleChange}
+          onBlur={this.comparePassword}
+        />
         <div>
           <button type="submit" className="primary-button">
             Sing up

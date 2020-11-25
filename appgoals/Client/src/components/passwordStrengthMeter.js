@@ -10,7 +10,7 @@ class PasswordStrengthMeter extends Component {
       case 0: 
         return "Weak";
       case 1:
-        return "Weak";
+        return "Fair";
       case 2:
         return "Fair";
       case 3:
@@ -26,7 +26,6 @@ class PasswordStrengthMeter extends Component {
   render() {
     const { password } = this.props;
     const scoreResult = zxcvbn(password);
-    // console.log("Password meter");
 
     return (
       <div className="password-strength-meter">
