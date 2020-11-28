@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import zxcvbn from "zxcvbn";
 
-import Input from "../../components/input";
-import PasswordRegister from "../../components/passwordRegister";
 
 import api from "../../services/api";
 
-import "./form.css";
+import "./form.scss";
+
+import Input from "../../components/input";
+import PasswordRegister from "../../components/passwordRegister";
+
 
 class UserForm extends Component {
   constructor(props) {
@@ -15,14 +17,17 @@ class UserForm extends Component {
       name: "",
       username: "",
       email: "",
-      age: null,
+      birthdate: null,
+      gender: "none",
       password: null,
       passwordConfirm: null,
 
       scorePassword: null,
-      validPassword: false,
+      isValidPassword: false,
       isSamePassword: false,
-      isEmail: false
+      isEmail: false,
+      existUsername: false,
+      existEmail: false,
 
     };
 
@@ -58,8 +63,10 @@ class UserForm extends Component {
     if(!response.error) {
       if (response.data.length === 0) {
         console.log("não tem esse nome de fdp");
+        this.setState({existUsername: false});
       } else {
         console.log("encontramos um fdp com esse nome");
+        this.setState({existUsername: true});
       }
     } else {
       console.log("deu erro");
@@ -75,8 +82,10 @@ class UserForm extends Component {
     if(!response.error) {
       if(response.data.length === 0){
         console.log("This email don't exist is OK");
+        this.setState({existEmail: false});
       } else {
         console.log("This email exist WRONG");
+        this.setState({existEmail: true});
       }
     } else {
       console.log("ERROR");
@@ -88,9 +97,11 @@ class UserForm extends Component {
     let value = event.target.value;
     this.setState({ [name]: value });
 
+    // console.log(`CHANGE name: ${name},  value: ${value}`);
+
     if(name === "password") {
       const scorePassword = zxcvbn(value, [this.state.username]);
-      console.log("scorePassword Obj ", scorePassword);
+      // console.log("scorePassword Obj ", scorePassword);
       this.setState({scorePassword: scorePassword.score}); 
     }
 
@@ -98,15 +109,16 @@ class UserForm extends Component {
 
   async handleSubmit(event) {
     event.preventDefault();
-    let { isSamePassword, isEmail, validPassword} = this.state;
-
-    if (isSamePassword && isEmail && validPassword) {
+    let { isSamePassword, isEmail, isValidPassword} = this.state;
+    // console.log(isSamePassword, isEmail, isValidPassword);
+    if (isSamePassword && isEmail && isValidPassword) {
       try {
         const response = await api.post("/user", {
           name: this.state.name,
           username: this.state.username,
           email: this.state.email,
-          age: this.state.age,
+          birthdate: this.state.birthdate,
+          gender: this.state.gender,
           password: this.state.password,
         });
         if(response.data === null){
@@ -131,9 +143,10 @@ class UserForm extends Component {
   validatePassword(event){
     event.preventDefault();
     if(this.state.scorePassword >= 2){
-      this.setState({validPassword: !this.state.validPassword});
+      this.setState({isValidPassword: true});
       console.log("Valid password");
     } else{
+      this.setState({isValidPassword: false});
       console.log("Invalid password");
     }
   }
@@ -142,8 +155,9 @@ class UserForm extends Component {
     event.preventDefault();
     if(this.state.passwordConfirm !== null) {
       if (this.state.passwordConfirm === this.state.password) {
-        this.setState({isSamePassword: !this.state.isSamePassword});
+        this.setState({isSamePassword: true});
       } else {
+        this.setState({isSamePassword: false});
         alert(`The passwords: "${this.state.password}" and "${this.state.passwordConfirm}" are not equals`);
       }
     } else {
@@ -171,9 +185,8 @@ class UserForm extends Component {
     }
   }
 
-
   render() {
-    const { password} = this.state;
+    const { password, existUsername, isEmail, isValidPassword, isSamePassword} = this.state;
 
     return (
       <form action="save-user" method="post" onSubmit={this.handleSubmit}>
@@ -187,6 +200,7 @@ class UserForm extends Component {
           name={'name'}
           placeholder={"Name"}
           onChange={this.handleChange}
+          existData={false}
         />
 
         < Input
@@ -196,6 +210,7 @@ class UserForm extends Component {
           placeholder={"User name"}
           onChange={this.handleChange}
           onBlur={this.checkUsername}
+          existData={existUsername}
         />
 
         <Input 
@@ -203,17 +218,31 @@ class UserForm extends Component {
           type={'email'}
           name={'email'}
           placeholder={'E-mail'}
+          // className={this.isEmail ? 'singup-input': 'singup-input-error'}
           onChange={this.handleChange}
           onBlur={this.validateEmail}
+          existData={isEmail}
         />
+        
+          <Input 
+            id={'birthdate'}
+            type={'date'}
+            name={'birthdate'}
+            placeholder={'Brithdate'}
+            onChange={this.handleChange}
+            existData={false}
+          />
 
-        <Input 
-          id={'age'}
-          type={'text'}
-          name={'age'}
-          placeholder={'Age'}
-          onChange={this.handleChange}
-        />
+        <div className='input-block'>
+          <label > Gender: 
+            <select id='gender' name='gender' onChange={this.handleChange}>
+              <option></option>
+              <option value='female'>Female</option>
+              <option value='male'>Male</option>
+              <option value='none'>None</option>
+            </select>
+          </label>
+        </div>
 
         <PasswordRegister
           id={'password'}
@@ -222,6 +251,7 @@ class UserForm extends Component {
           onChange={this.handleChange}
           onBlur={this.validatePassword}
           password={password} 
+          isValidData={isValidPassword}          
         />
 
         <PasswordRegister 
@@ -230,6 +260,7 @@ class UserForm extends Component {
           placeholder={'Password confirm'}
           onChange={this.handleChange}
           onBlur={this.comparePassword}
+          isValidData={isSamePassword}
         />
         <div>
           <button type="submit" className="primary-button">
