@@ -3,7 +3,8 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faEye, faEyeSlash} from '@fortawesome/free-solid-svg-icons';
 import PasswordStrengthMeter from "./passwordStrengthMeter";
 
-import "../views/userRegister/form.scss";
+import "../../containers/userRegister/form.scss";
+import "./password.css";
 
 class PasswordRegister extends Component {
     constructor(props){
@@ -40,7 +41,7 @@ class PasswordRegister extends Component {
         const {isRevealPassword, isPristine} = this.state
         const { password, isValidData} = this.props;
         const flagClassNAme = this.changeStateClassName(isPristine, isValidData)
-        console.log(`Password pristine:  ${isPristine}`);
+        // console.log(`Password pristine:  ${isPristine}`);
 
         return(
             <div className="input-block" >

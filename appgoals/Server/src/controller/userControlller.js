@@ -1,8 +1,7 @@
 const mongoose = require("mongoose");
 const User = mongoose.model("User");
 
-
-async function findData(data){
+async function findData(data) {
   const user = await User.find(data);
   return user;
 }
@@ -30,62 +29,46 @@ module.exports = {
   },
 
   async query(req, res) {
-    try{
-    const {search_field, search_value} = req.query;
+    try {
+      const { search_field, search_value } = req.query;
+      const data = {};
+      if (search_field !== "" && search_value !== "") {
+        data[search_field] = search_value;
+      } 
+      const user = await findData(data);
 
-    const data = {};
-    if(search_field !== '' && search_value !== ''){
-      data[search_field] = search_value;
-    }
-
-    const user = await findData(data);
-
-    // if (!user || user.length === 0) {
-    //   return res.status(404).json({
-    //     status: 'failure',
-    //     data: user,
-    //     message: `User with the given ${search_field} : ${search_value} not found`,
-    //   });
-
-    // } else {
-
-    // res.status(200).json({
-    //   status: 'success',
-    //   data: user
-    // });
-    // }
-    return res.json(user)
+      return res.json(user);
     } catch (error) {
       res.status(500).json({
-        status: 'failure',
-        error: error.message
+        status: "failure",
+        error: error.message,
       });
     }
   },
 
   async store(req, res) {
-    try{
+    try {
       const usernameObj = await findUsername(req.body.username);
       const emailObj = await findEmail(req.body.email);
 
       console.log("username ", usernameObj);
-      console.log("email ", emailObj)
+      console.log("email ", emailObj);
 
       if (usernameObj === null && emailObj === null) {
         const user = await User.create(req.body);
         // return res.json(user);
         return res.status(200).json({
-          status:'success',
-          data: user
-        })
+          status: "success",
+          data: user,
+        });
       } else {
         return res.json(null);
       }
     } catch (error) {
       res.status(500).json({
-        status: 'failure',
-        error: error.message
-      })
+        status: "failure",
+        error: error.message,
+      });
     }
   },
 

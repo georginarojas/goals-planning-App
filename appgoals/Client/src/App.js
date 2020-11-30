@@ -3,12 +3,12 @@ import './css/main.css';
 
 import './css/button.css';
 
-import UserForm from "./views/userRegister/userRegister";
+import UserRegisterForm from "./containers/userRegister/form";
 
 const App = () => (
   <div className="App">
     <Header />
-    <UserForm />
+    <UserRegisterForm />
   </div>
 );
 

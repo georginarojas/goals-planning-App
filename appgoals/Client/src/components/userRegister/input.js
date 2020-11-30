@@ -1,7 +1,7 @@
 import React, { Component} from "react";
-import "../views/userRegister/form.scss";
+import "../../containers/userRegister/form.scss";
 
-class Input extends Component {
+class InputRegister extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -28,7 +28,7 @@ class Input extends Component {
 
     render() {
         const {isPristine} = this.state;
-        const {existData} = this.props;
+        const {existData, isData} = this.props;
         // console.log(`>>>> INPUT existData: ${existData}`);
         // console.log(`>>>> INPUT isPristine: ${isPristine}`);
         const flagClassNAme = this.changeStateClassName(isPristine, existData);
@@ -50,9 +50,20 @@ class Input extends Component {
                     onClick={this.togglePristine}
                     onFocus={this.togglePristine}
                 />
+                <label className="message-error">
+                    {existData ?
+                    <p>This {this.props.placeholder} exist</p> :  null
+                    }
+                </label>
+                <label className="message-error">
+                    {
+                        (!isPristine && !isData) ?
+                    <p>Invalid {this.props.placeholder}</p> : null
+                    }
+                </label>
             </div>
         )
     }
 }
 
-export default Input;
+export default InputRegister;

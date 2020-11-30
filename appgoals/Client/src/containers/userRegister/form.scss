@@ -39,35 +39,18 @@ form {
   border: 1px solid rgb(168, 21, 21);
 }
 
-.input-block select {
-  width: 100%;
-  background: #f5f8fa;
-  border: 1px solid #d3e2e5;
-  border-radius: 0.5rem;
-  color: #5c8599;
-  height: 3rem;
-  padding: 1 1.6rem;
-}
-
-.input-block .customIcon {
-  position: absolute;
-  top: 34px;
-  left: auto;
-  right: 10px;
-  cursor: pointer;
-
-  display: flex;
-  align-items: left;
-  justify-content: center;
-  text-align: left;
-}
-
 .input-block input::placeholder {
   color: #7695a5;
   opacity: 100;
 }
 .input-block input:focus {
   border: 1px Solid rgb(46, 103, 141);
+}
+
+.input-block .message-error{
+  font-size: 14px;
+  text-align: left;
+  color: #b82020
 }
 
 // .input-block input:valid {
