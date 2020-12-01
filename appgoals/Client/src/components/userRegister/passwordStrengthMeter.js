@@ -26,6 +26,7 @@ class PasswordStrengthMeter extends Component {
   render() {
     const { password } = this.props;
     const scoreResult = zxcvbn(password);
+    console.log(`SCORE ${scoreResult.score}`);
 
     return (
       <div className="password-strength-meter">
@@ -40,6 +41,11 @@ class PasswordStrengthMeter extends Component {
           </>
           )}
         </label>
+        <span className="message-error">
+          {
+            (scoreResult.score<2) ? <p>Invalid password</p> :  null
+          }
+        </span>
       </div>
     );
   }

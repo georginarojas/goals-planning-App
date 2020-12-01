@@ -34,6 +34,7 @@ class UserRegisterForm extends Component {
     this.comparePassword = this.comparePassword.bind(this);
     this.validatePassword = this.validatePassword.bind(this);
     this.validateEmail = this.validateEmail.bind(this);
+    this.clearForm = this.clearForm.bind(this);
   }
 
   async fetchData(field, value) {
@@ -127,6 +128,8 @@ class UserRegisterForm extends Component {
         } else {
           alert(`User ${response.data.name} was created with success`);
           console.log(response.data);
+          // event.target.reset();
+          this.clearForm(event);
         }
       } catch (error) {
         alert("Was not possible to make the register");
@@ -186,6 +189,19 @@ class UserRegisterForm extends Component {
     }
   }
 
+  clearForm(event){
+    event.preventDefault();
+    event.target.reset();
+    this.setState({
+      name: '',
+      username: '',
+      email: '',
+      birthdate: '',
+      gender: '',
+      password: '',
+    })
+  }
+
   render() {
     const {
       password,
@@ -195,6 +211,8 @@ class UserRegisterForm extends Component {
       isValidPassword,
       isSamePassword,
     } = this.state;
+
+    console.log(`Valid ${isValidPassword} Same ${isSamePassword}`);
 
     return (
       <form action="save-user" method="post" onSubmit={this.handleSubmit}>
@@ -269,7 +287,9 @@ class UserRegisterForm extends Component {
           onChange={this.handleChange}
           onBlur={this.comparePassword}
           isValidData={isSamePassword}
+
         />
+        
         <div>
           <button type="submit" className="primary-button">
             Sing up

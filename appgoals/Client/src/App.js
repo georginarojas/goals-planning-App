@@ -1,7 +1,7 @@
-import Header from './components/header';
-import './css/main.css';
+import Header from './utils/header';
+import './utils/css/main.css';
 
-import './css/button.css';
+import './utils/css/button.css';
 
 import UserRegisterForm from "./containers/userRegister/form";
 

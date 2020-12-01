@@ -22,6 +22,6 @@ textarea{
     font: 400 1.8rem/1 "Nunito", sans-serif;
 }
 
-input{
+input, select{
     font: 400 1.6rem/1 "Nunito", sans-serif;
 }

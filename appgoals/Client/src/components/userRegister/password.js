@@ -39,8 +39,8 @@ class PasswordRegister extends Component {
 
     render() {
         const {isRevealPassword, isPristine} = this.state
-        const { password, isValidData} = this.props;
-        const flagClassNAme = this.changeStateClassName(isPristine, isValidData)
+        const { password, isValidData, name} = this.props;
+        const flagClassName = this.changeStateClassName(isPristine, isValidData)
         // console.log(`Password pristine:  ${isPristine}`);
 
         return(
@@ -53,11 +53,10 @@ class PasswordRegister extends Component {
                     autoComplete="off"
                     placeholder={this.props.placeholder}
                     onChange={this.props.onChange}
-                    // ref={this.passwordOneRef}
                     onBlur={this.props.onBlur}
                     onClick={this.togglePristine}
                     onFocus={this.togglePristine}
-                    className={(flagClassNAme)? 'singup-input' : 'singup-input-error'}
+                    className={(flagClassName)? 'singup-input' : 'singup-input-error'}
                 />
                 <span onClick={this.togglePassword} ref={this.iconRevealPasswordRef} className="customIcon">
                     {   
@@ -69,6 +68,11 @@ class PasswordRegister extends Component {
                 {
                     password && <PasswordStrengthMeter password={password} />
                 }
+                <label className="message-error">
+                    {
+                        (!isPristine && !isValidData && name ==="passwordConfirm") ? <p>Different passwords</p> :  null
+                    }
+                </label>
             </div>
         )
     }
