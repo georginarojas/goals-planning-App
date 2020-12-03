@@ -20,7 +20,6 @@ form {
 .input-block + .input-block {
   margin-top: 2.4rem;
   position: relative;
-  /* display: inline; */
 }
 
 .input-block label {
@@ -49,11 +48,7 @@ form {
 
 .input-block .message-error{
   font-size: 14px;
-  text-align: left;
-  color: #b82020
+  text-align: right;
+  color: #b82020;  
 }
 
-// .input-block input:valid {
-//   background-color: #f5f8fa;
-//   border: 1px solid #49925f;;
-// }

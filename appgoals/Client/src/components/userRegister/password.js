@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faEye, faEyeSlash} from '@fortawesome/free-solid-svg-icons';
 import PasswordStrengthMeter from "./passwordStrengthMeter";
+import PasswordRules from "./passwordRules";
 
 import "../../containers/userRegister/form.scss";
 import "./password.css";
@@ -41,7 +42,6 @@ class PasswordRegister extends Component {
         const {isRevealPassword, isPristine} = this.state
         const { password, isValidData, name} = this.props;
         const flagClassName = this.changeStateClassName(isPristine, isValidData)
-        // console.log(`Password pristine:  ${isPristine}`);
 
         return(
             <div className="input-block" >
@@ -67,6 +67,10 @@ class PasswordRegister extends Component {
                 </span>
                 {
                     password && <PasswordStrengthMeter password={password} />
+                }
+
+                {
+                    password && <PasswordRules password={password}/>
                 }
                 <label className="message-error">
                     {

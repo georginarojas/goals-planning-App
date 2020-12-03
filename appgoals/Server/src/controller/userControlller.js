@@ -34,7 +34,7 @@ module.exports = {
       const data = {};
       if (search_field !== "" && search_value !== "") {
         data[search_field] = search_value;
-      } 
+      }
       const user = await findData(data);
 
       return res.json(user);
@@ -51,12 +51,11 @@ module.exports = {
       const usernameObj = await findUsername(req.body.username);
       const emailObj = await findEmail(req.body.email);
 
-      console.log("username ", usernameObj);
-      console.log("email ", emailObj);
+      // console.log("username ", usernameObj);
+      // console.log("email ", emailObj);
 
       if (usernameObj === null && emailObj === null) {
         const user = await User.create(req.body);
-        // return res.json(user);
         return res.status(200).json({
           status: "success",
           data: user,

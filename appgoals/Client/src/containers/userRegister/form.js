@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import zxcvbn from "zxcvbn";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import api from "../../services/api";
 import "./form.scss";
 
@@ -34,7 +36,7 @@ class UserRegisterForm extends Component {
     this.comparePassword = this.comparePassword.bind(this);
     this.validatePassword = this.validatePassword.bind(this);
     this.validateEmail = this.validateEmail.bind(this);
-    this.clearForm = this.clearForm.bind(this);
+    this.resetForm = this.resetForm.bind(this);
   }
 
   async fetchData(field, value) {
@@ -58,20 +60,18 @@ class UserRegisterForm extends Component {
     event.preventDefault();
     const username = this.state.username;
     const field = "username";
-    console.log("User name value ", username);
     if (username.length !== 0) {
       const response = await this.fetchData(field, username);
-      console.log(response.data);
       if (!response.error) {
         if (response.data.length === 0) {
-          console.log("não tem esse nome de fdp", response.data.length);
           this.setState({ existUsername: false });
         } else {
-          console.log("encontramos um fdp com esse nome");
           this.setState({ existUsername: true });
         }
       } else {
-        console.log("deu erro");
+        let message = "Error: Server failed ";
+        this.showMessageError(message);
+        console.log("deu erro", response);
       }
     }
   }
@@ -84,14 +84,13 @@ class UserRegisterForm extends Component {
 
     if (!response.error) {
       if (response.data.length === 0) {
-        console.log("This email don't exist is OK");
         this.setState({ existEmail: false });
       } else {
-        console.log("This email exist WRONG");
         this.setState({ existEmail: true });
       }
     } else {
-      console.log("ERROR");
+      let message = "Error: Server failed ";
+      this.showMessageError(message);
     }
   }
 
@@ -100,11 +99,8 @@ class UserRegisterForm extends Component {
     let value = event.target.value;
     this.setState({ [name]: value });
 
-    // console.log(`CHANGE name: ${name},  value: ${value}`);
-
     if (name === "password") {
       const scorePassword = zxcvbn(value, [this.state.username]);
-      // console.log("scorePassword Obj ", scorePassword);
       this.setState({ scorePassword: scorePassword.score });
     }
   }
@@ -112,7 +108,6 @@ class UserRegisterForm extends Component {
   async handleSubmit(event) {
     event.preventDefault();
     let { isSamePassword, isEmail, isValidPassword } = this.state;
-    // console.log(isSamePassword, isEmail, isValidPassword);
     if (isSamePassword && isEmail && isValidPassword) {
       try {
         const response = await api.post("/user", {
@@ -124,19 +119,21 @@ class UserRegisterForm extends Component {
           password: this.state.password,
         });
         if (response.data === null) {
-          alert("Was not possible to make the register, this user exits");
+          let message = `Error: Was not possible to make the register, ${this.state.username} or ${this.state.email} exist`;
+          this.showMessageError(message);
         } else {
-          alert(`User ${response.data.name} was created with success`);
-          console.log(response.data);
-          // event.target.reset();
-          this.clearForm(event);
+          let message = "User was create with success";
+          this.showMessageSuccess(message);
+          this.resetForm(event);
         }
       } catch (error) {
-        alert("Was not possible to make the register");
         console.log(error);
+        let message = "Error: Server failed ";
+        this.showMessageError(message);
       }
     } else {
-      alert("Was not possible to make the register, different password");
+      let message = `Error: please check the data are correct`;
+      this.showMessageError(message);
       return {
         error: true,
       };
@@ -147,10 +144,8 @@ class UserRegisterForm extends Component {
     event.preventDefault();
     if (this.state.scorePassword >= 2) {
       this.setState({ isValidPassword: true });
-      console.log("Valid password");
     } else {
       this.setState({ isValidPassword: false });
-      console.log("Invalid password");
     }
   }
 
@@ -161,12 +156,12 @@ class UserRegisterForm extends Component {
         this.setState({ isSamePassword: true });
       } else {
         this.setState({ isSamePassword: false });
-        alert(
-          `The passwords: "${this.state.password}" and "${this.state.passwordConfirm}" are not equals`
-        );
+        let message = `The passwords: "${this.state.password}" and "${this.state.passwordConfirm}" are not equals`;
+        this.showMessageWarn(message);
       }
     } else {
-      alert("Please confirm the password");
+      let message = "Please confirm the password";
+      this.showMessageWarn(message);
     }
   }
 
@@ -175,31 +170,68 @@ class UserRegisterForm extends Component {
     const email = this.state.email;
 
     let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    // let re = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/
 
     if (email.length !== 0) {
       if (re.test(email)) {
         this.setState({ email: this.state.email });
         this.setState({ isEmail: true });
         const response = await this.checkEmail(event);
-        console.log(">>>>>> ", this.state.isEmail);
       } else {
         this.setState({ isEmail: false });
-        console.log(">>>>>> ", this.state.isEmail);
       }
     }
   }
 
-  clearForm(event){
+  showMessageError = (message) => {
+    toast.error(message, {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
+  showMessageWarn = (message) => {
+    toast.warn(message, {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
+  showMessageSuccess = (message) => {
+    toast.success(message, {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
+  resetForm(event) {
     event.preventDefault();
     event.target.reset();
     this.setState({
-      name: '',
-      username: '',
-      email: '',
-      birthdate: '',
-      gender: '',
-      password: '',
-    })
+      name: "",
+      username: "",
+      email: "",
+      birthdate: "",
+      gender: "",
+      password: "",
+      passwordConfirm: "",
+      scorePassword: "",
+    });
   }
 
   render() {
@@ -212,11 +244,11 @@ class UserRegisterForm extends Component {
       isSamePassword,
     } = this.state;
 
-    console.log(`Valid ${isValidPassword} Same ${isSamePassword}`);
-
     return (
       <form action="save-user" method="post" onSubmit={this.handleSubmit}>
         <div className="input-block">
+          <h2 className="tittle-form">Register new user </h2>
+          <br/>
           <p>Please enter the next data:</p>
         </div>
 
@@ -246,7 +278,6 @@ class UserRegisterForm extends Component {
           type={"email"}
           name={"email"}
           placeholder={"E-mail"}
-          // className={this.isEmail ? 'singup-input': 'singup-input-error'}
           onChange={this.handleChange}
           onBlur={this.validateEmail}
           existData={existEmail}
@@ -263,7 +294,7 @@ class UserRegisterForm extends Component {
           isData={true}
         />
 
-        < SelectRegister 
+        <SelectRegister
           id={"gender"}
           name={"gender"}
           placeholder={"Gender"}
@@ -287,13 +318,20 @@ class UserRegisterForm extends Component {
           onChange={this.handleChange}
           onBlur={this.comparePassword}
           isValidData={isSamePassword}
-
         />
-        
+
         <div>
           <button type="submit" className="primary-button">
             Sing up
           </button>
+        </div>
+        <div className="message-toast">
+          <ToastContainer
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+          />
         </div>
       </form>
     );

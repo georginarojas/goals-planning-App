@@ -25,3 +25,17 @@ textarea{
 input, select{
     font: 400 1.6rem/1 "Nunito", sans-serif;
 }
+
+.message-toast{
+    font-size: 1.6rem;
+    font-family: sans-serif;
+    text-align: center;
+}
+
+.tittle-form{
+    color: #666972;
+    text-align: center;
+    font-size: 2.4rem;
+    /* margin-top: 2rem; */
+    margin-bottom: 3rem;
+  }
