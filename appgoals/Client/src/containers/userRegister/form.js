@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import zxcvbn from "zxcvbn";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import "../../../node_modules/react-toastify/dist/ReactToastify.css";
 import api from "../../services/api";
 import "./form.scss";
 
@@ -156,7 +156,7 @@ class UserRegisterForm extends Component {
         this.setState({ isSamePassword: true });
       } else {
         this.setState({ isSamePassword: false });
-        let message = `The passwords: "${this.state.password}" and "${this.state.passwordConfirm}" are not equals`;
+        let message = `Passwords don't match`;
         this.showMessageWarn(message);
       }
     } else {

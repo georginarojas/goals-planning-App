@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const User = mongoose.model("User");
+const bcrypt = require("bcryptjs");
+
 
 async function findData(data) {
   const user = await User.find(data);
@@ -15,6 +17,8 @@ async function findEmail(email) {
   return await User.findOne({ email }).exec();
 }
 
+//------------------------------
+
 module.exports = {
   async index(req, res) {
     const users = await User.find();
@@ -28,6 +32,7 @@ module.exports = {
     return res.json(user);
   },
 
+  // Check if a username or e-mail exist
   async query(req, res) {
     try {
       const { search_field, search_value } = req.query;
@@ -46,22 +51,23 @@ module.exports = {
     }
   },
 
+  // Save a new user
   async store(req, res) {
     try {
       const usernameObj = await findUsername(req.body.username);
       const emailObj = await findEmail(req.body.email);
 
-      // console.log("username ", usernameObj);
-      // console.log("email ", emailObj);
-
       if (usernameObj === null && emailObj === null) {
         const user = await User.create(req.body);
-        return res.status(200).json({
-          status: "success",
+        return res.status(201).json({
+          status: "created",
           data: user,
         });
       } else {
-        return res.json(null);
+        return res.status(400).json({
+          status: "failure",
+          error: "User is already exist"
+        });
       }
     } catch (error) {
       res.status(500).json({

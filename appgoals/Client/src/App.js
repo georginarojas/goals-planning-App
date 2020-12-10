@@ -4,13 +4,13 @@ import './utils/css/main.css';
 import './utils/css/button.css';
 
 import UserRegisterForm from "./containers/userRegister/form";
-import UserAuthentication from "./containers/userAuthentication/authentication"
+import UserLogin from "./containers/login/login"
 
 const App = () => (
   <div className="App">
     <Header />
-    {/* <UserRegisterForm /> */}
-    <UserAuthentication />
+    <UserRegisterForm />
+    <UserLogin />
   </div>
 );
 

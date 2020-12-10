@@ -39,3 +39,9 @@ input, select{
     /* margin-top: 2rem; */
     margin-bottom: 3rem;
   }
+
+  .message-error{
+    font-size: 1.8rem;
+    text-align: right;
+    color: #b82020;  
+  }
