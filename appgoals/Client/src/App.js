@@ -1,16 +1,21 @@
-import Header from './utils/header';
-import './utils/css/main.css';
+import {Switch, Route } from "react-router-dom";
 
-import './utils/css/button.css';
+import "./utils/css/main.css";
 
+import "./utils/css/button.css";
+
+import Home from "./containers/wellcome-Test";
 import UserRegisterForm from "./containers/userRegister/form";
-import UserLogin from "./containers/login/login"
+import UserLogin from "./containers/login/login";
 
 const App = () => (
   <div className="App">
-    <Header />
-    <UserRegisterForm />
-    <UserLogin />
+    <Switch>
+      <Route path="/" exact={true} component={Home} />
+      <Route path="/register" component={UserRegisterForm} />
+      <Route path="/login" component={UserLogin} />
+      <Route component={Error} />
+    </Switch>
   </div>
 );
 
