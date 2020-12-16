@@ -27,15 +27,15 @@ passport.use(
         var user = await User.findOne({ email: username });
       }
       if (!user) {
-        return done(null, false, req.flash(("signinMessage", "No user found")));
+        return done(null, false);
       }
       if (!user.comparePassword(password)) {
         return done(
           null,
           false,
-          req.flash(("signinMessage", "Incorrect password"))
         );
       }
+      console.log(">>>> User ", user);
       return done(null, user);
     }
   )

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import api from "../../services/api";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import {Redirect} from "react-router-dom";
 
 import InputLogin from "../../components/login/input";
 import "../userRegister/form.scss";
@@ -13,18 +12,21 @@ class UserLogin extends Component {
       data: "",
       password: null,
       isValidData: true,
+      isAuth: false,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.clean = this.clean.bind(this);
   }
 
   async fetchData(value1, password) {
     try {
-      const response = await api.post("/signin", {
+      const response = await api.post("/login", {
         username: value1,
         password: password,
       });
-
+      console.log("RESPONSE ", response);
+      localStorage.setItem('JWT', response.data.token);
       return {
         error: false,
       };
@@ -46,44 +48,26 @@ class UserLogin extends Component {
     const value1 = this.state.data;
     const value2 = this.state.password;
     const response = await this.fetchData(value1, value2);
-    console.log("error ", response.error);
     if (response.error) {
-      this.setState({ isValidData: false });
-      let message = "Error: password or user not valid";
-      this.showMessageError(message);
+      this.setState({ isValidData: false, isAuth : false });
+      this.clean(event);
     } else {
-      this.setState({ isValidData: true });
-      let message = "Success";
-      this.showMessageSuccess(message);
+      this.setState({ isValidData: true, isAuth: true});
     }
   }
 
-  showMessageSuccess = (message) => {
-    toast.success(message, {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
+  clean(event){
+    event.preventDefault();
+    event.target.reset();
+    this.setState({
+      data: "",
+      password: "",
     });
-  };
-
-  showMessageError = (message) => {
-    toast.error(message, {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  };
+  }
 
   render() {
-    const { isValidData } = this.state;
+    const { isValidData, isAuth } = this.state;
+
     return (
       <form
         action="authentication-user"
@@ -122,13 +106,15 @@ class UserLogin extends Component {
           <button type="submit" className="primary-button">
             Login
           </button>
-          <ToastContainer
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-          />
         </div>
+
+        <div>
+          { 
+            (isValidData && isAuth) ? 
+            <Redirect to='/' /> : null
+          }
+        </div>
+
       </form>
     );
   }

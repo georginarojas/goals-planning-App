@@ -53,6 +53,7 @@ class InputLogin extends Component {
                     onClick={this.togglePristine}
                     onFocus={this.togglePristine}
                     className={(flagClassName)? 'singup-input' : 'singup-input-error'}
+                    required
                 />
                 {
                    ( name === "password")?
