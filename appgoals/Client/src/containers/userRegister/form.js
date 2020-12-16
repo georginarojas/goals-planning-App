@@ -25,6 +25,7 @@ class UserRegisterForm extends Component {
       scorePassword: null,
       isValidPassword: false,
       isSamePassword: false,
+      isValidUsername: false,
       isEmail: false,
       existUsername: false,
       existEmail: false,
@@ -60,7 +61,8 @@ class UserRegisterForm extends Component {
     event.preventDefault();
     const username = this.state.username;
     const field = "username";
-    if (username.length !== 0) {
+    if (username.length !== 0 && (username.indexOf("@") === -1)) {
+      this.setState({isValidUsername: true});
       const response = await this.fetchData(field, username);
       if (!response.error) {
         if (response.data.length === 0) {
@@ -73,6 +75,8 @@ class UserRegisterForm extends Component {
         this.showMessageError(message);
         console.log("deu erro", response);
       }
+    } else{
+      this.setState({isValidUsername: false});
     }
   }
 
@@ -107,8 +111,8 @@ class UserRegisterForm extends Component {
 
   async handleSubmit(event) {
     event.preventDefault();
-    let { isSamePassword, isEmail, isValidPassword } = this.state;
-    if (isSamePassword && isEmail && isValidPassword) {
+    let { isSamePassword, isEmail, isValidPassword, isValidUsername } = this.state;
+    if (isSamePassword && isEmail && isValidPassword && isValidUsername) {
       try {
         const response = await api.post("/user", {
           name: this.state.name,
@@ -169,16 +173,16 @@ class UserRegisterForm extends Component {
     event.preventDefault();
     const email = this.state.email;
 
-    let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    // let re = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/
+    let re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     if (email.length !== 0) {
       if (re.test(email)) {
         this.setState({ email: this.state.email });
         this.setState({ isEmail: true });
-        const response = await this.checkEmail(event);
+        await this.checkEmail(event);
       } else {
         this.setState({ isEmail: false });
+        this.setState({ existEmail: false });
       }
     }
   }
@@ -242,6 +246,7 @@ class UserRegisterForm extends Component {
       existEmail,
       isValidPassword,
       isSamePassword,
+      isValidUsername,
     } = this.state;
 
     return (
@@ -270,7 +275,7 @@ class UserRegisterForm extends Component {
           onChange={this.handleChange}
           onBlur={this.checkUsername}
           existData={existUsername}
-          isData={true}
+          isData={isValidUsername}
         />
 
         <InputRegister

@@ -5,26 +5,28 @@ const passport = require("passport");
 const jwtSecret = require("../config/jwtConfig");
 const jwt = require("jsonwebtoken");
 
-
-
 async function findData(data) {
   const user = await User.find(data);
   return user;
 }
 
 async function findUsername(username) {
-  const user = await User.findOne({ username }).exec();
-  return user;
+  if (username.indexOf("@") === -1) {
+    const user = await User.findOne({ username }).exec();
+    return user;
+  }
 }
 
 async function findEmail(email) {
-  return await User.findOne({ email }).exec();
+  let re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  if (re.test(email)) {
+    return await User.findOne({ email }).exec();
+  }
 }
 
 //------------------------------
 
 module.exports = {
-
   // Index
   async index(req, res) {
     const users = await User.find();
@@ -72,7 +74,7 @@ module.exports = {
       } else {
         return res.status(400).json({
           status: "failure",
-          error: "User is already exist"
+          error: "Was not possible to create a user",
         });
       }
     } catch (error) {
@@ -84,52 +86,42 @@ module.exports = {
   },
 
   // Login user
-  login(req, res, next){
-    passport.authenticate('local-signin', (error, users, info) =>{
-      if(error){
+  login(req, res, next) {
+    passport.authenticate("local-signin", (error, users, info) => {
+      if (error) {
         console.log(`>>>> Error ${error}`);
       }
-      if(info !== undefined){
+      if (info !== undefined) {
         console.log(`Info ${info.message}`);
       } else {
-        console.log(`++++ Users ${users._id}`);
-  
-        req.logIn(users, ()=> {
-          console.log("***REQ ", req.body.username);
-          if(req.body.username.indexOf("@")=== -1){
-            // console.log("USERNAME ", User.findOne({username: req.body.username, }));
-            User.findOne({username: req.body.username, }).then(user => {
-              console.log("USERNAME ", user);
+        req.logIn(users, () => {
+          if (req.body.username.indexOf("@") === -1) {
+            User.findOne({ username: req.body.username }).then((user) => {
               const token = jwt.sign({ id: user._id }, jwtSecret.secret, {
-                expiresIn: 60*60,
+                expiresIn: 60 * 60,
               });
-              res.status(200).send({ 
+              res.status(200).send({
                 auth: true,
                 token,
                 message: "user found and logged in",
               });
-            });  
+            });
           } else {
-            // console.log("EMAIL ", User.findOne({email: req.body.username, }));
-            User.findOne({email: req.body.username, }).then(user => {
-              console.log("EMAIL ", user);
+            User.findOne({ email: req.body.username }).then((user) => {
               const token = jwt.sign({ id: user._id }, jwtSecret.secret, {
-                expiresIn: 60*60,
+                expiresIn: 60 * 60,
               });
-              res.status(200).send({ 
+              res.status(200).send({
                 auth: true,
                 token,
                 message: "user found and logged in",
               });
-            });  
+            });
           }
         });
       }
     })(req, res, next);
   },
-  
-
-
 
   // Update User
   async update(req, res) {
