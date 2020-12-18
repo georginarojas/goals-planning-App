@@ -42,34 +42,40 @@ module.exports = {
   // Find user
   show(req, res, next){
     passport.authenticate('jwt', {session: false}, (error, user, info) =>{
-      // console.log(` >>>> CONTROLLER error ${error}, user ${user}, info ${info}`);
+      console.log(` >>>> CONTROLLER error ${error}, userID ${user._id}, reqID ${req.query.userId} info ${info}`);
       if(error){
         console.log(error);
       }
       if(info !== undefined){
-        console.log("INFORMATION", info.message);
+        console.log("INFORMATION msg", info.message);
         res.status(401).send(info.message);
-      } else if( user._id == req.body._id){
-        User.findById({_id: req.body._id}).then((userInfo) =>{
+      } else if( user._id == req.query.userId){
+        User.findById({_id: req.query.userId}).then((userInfo) =>{
           if (userInfo != null){
             console.log('User found Controller');
+            userInfo.password = undefined;
             res.status(200).send({ 
+              status: "success",
+              data: userInfo,
               auth: true,
-              name: userInfo.name, 
-              username: userInfo.username,
-              email: userInfo.email,
-              gender: userInfo.gender,
-              birthdate: userInfo.birthdate,
-              message: "user found in db",
             });
           } else{
             console.error("not user found");
-            res.status(401).send("no user");
+            res.status(401).send({ 
+              status: "failure",
+              data: null,
+              message: "User not found",
+              auth: false,
+            });
           }
         });
       } else{
         console.error('jwt id do not match');
-        res.status(403).send('id and jwt toke dont matcg')
+        res.status(403).send({
+          status: "failure",
+          message: 'id and jwt toke dont matcg',
+          auth: false
+        })
       }
     }) (req, res, next);
   },
