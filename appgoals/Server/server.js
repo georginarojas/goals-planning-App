@@ -23,6 +23,7 @@ mongoose.connect('mongodb://localhost:27017/admingoals', {useNewUrlParser: true}
 
 requireDir('./src/models');
 require('./src/passport/local-auth');
+require('./src/passport/jwt-auth');
 // require('./src/config/jwtConfig');
 
 // Middlewares

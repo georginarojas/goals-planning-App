@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import api from "../../services/api";
-import {Redirect} from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 import InputLogin from "../../components/login/input";
 import "../userRegister/form.scss";
@@ -13,6 +13,7 @@ class UserLogin extends Component {
       password: null,
       isValidData: true,
       isAuth: false,
+      userId: "",
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -26,9 +27,10 @@ class UserLogin extends Component {
         password: password,
       });
       console.log("RESPONSE ", response);
-      localStorage.setItem('JWT', response.data.token);
+      localStorage.setItem("JWT", response.data.token);
       return {
         error: false,
+        data: response.data.id,
       };
     } catch (error) {
       return {
@@ -49,24 +51,26 @@ class UserLogin extends Component {
     const value2 = this.state.password;
     const response = await this.fetchData(value1, value2);
     if (response.error) {
-      this.setState({ isValidData: false, isAuth : false });
+      this.setState({ isValidData: false, isAuth: false });
       this.clean(event);
     } else {
-      this.setState({ isValidData: true, isAuth: true});
+      this.setState({ isValidData: true, isAuth: true, userId: response.data });
     }
   }
 
-  clean(event){
+  clean(event) {
     event.preventDefault();
     event.target.reset();
     this.setState({
       data: "",
       password: "",
+      userId: "",
     });
   }
 
   render() {
-    const { isValidData, isAuth } = this.state;
+    const { isValidData, isAuth, userId } = this.state;
+    console.log("ID: ", userId);
 
     return (
       <form
@@ -95,7 +99,7 @@ class UserLogin extends Component {
           isValidData={isValidData}
         />
 
-        <div >
+        <div>
           <br />
           <label className="message-error">
             {!isValidData ? <p>User or password incorrect</p> : null}
@@ -109,12 +113,11 @@ class UserLogin extends Component {
         </div>
 
         <div>
-          { 
-            (isValidData && isAuth) ? 
-            <Redirect to='/' /> : null
-          }
+          {isValidData && isAuth ? (
+            // <Redirect to='/profile' /> : null
+            <Redirect to={`/profile/${userId}`} />
+          ) : null}
         </div>
-
       </form>
     );
   }

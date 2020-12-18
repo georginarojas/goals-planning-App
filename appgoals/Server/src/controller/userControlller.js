@@ -34,10 +34,44 @@ module.exports = {
     return res.json(users);
   },
 
-  async show(req, res) {
-    const user = await User.findById(req.params.id);
+  // async show(req, res) {
+    // const user = await User.findById(req.params.id);
+    // return res.json(user);
+  // },
 
-    return res.json(user);
+  // Find user
+  show(req, res, next){
+    passport.authenticate('jwt', {session: false}, (error, user, info) =>{
+      // console.log(` >>>> CONTROLLER error ${error}, user ${user}, info ${info}`);
+      if(error){
+        console.log(error);
+      }
+      if(info !== undefined){
+        console.log("INFORMATION", info.message);
+        res.status(401).send(info.message);
+      } else if( user._id == req.body._id){
+        User.findById({_id: req.body._id}).then((userInfo) =>{
+          if (userInfo != null){
+            console.log('User found Controller');
+            res.status(200).send({ 
+              auth: true,
+              name: userInfo.name, 
+              username: userInfo.username,
+              email: userInfo.email,
+              gender: userInfo.gender,
+              birthdate: userInfo.birthdate,
+              message: "user found in db",
+            });
+          } else{
+            console.error("not user found");
+            res.status(401).send("no user");
+          }
+        });
+      } else{
+        console.error('jwt id do not match');
+        res.status(403).send('id and jwt toke dont matcg')
+      }
+    }) (req, res, next);
   },
 
   // Query a user information
@@ -98,7 +132,7 @@ module.exports = {
           if (req.body.username.indexOf("@") === -1) {
             User.findOne({ username: req.body.username }).then((user) => {
               const token = jwt.sign({ id: user._id }, jwtSecret.secret, {
-                expiresIn: 60 * 60,
+                expiresIn: "1h",
               });
               res.status(200).send({
                 auth: true,
@@ -108,12 +142,14 @@ module.exports = {
             });
           } else {
             User.findOne({ email: req.body.username }).then((user) => {
+              const id = user._id;
               const token = jwt.sign({ id: user._id }, jwtSecret.secret, {
-                expiresIn: 60 * 60,
+                expiresIn: 60 * 2,
               });
               res.status(200).send({
                 auth: true,
                 token,
+                id,
                 message: "user found and logged in",
               });
             });
