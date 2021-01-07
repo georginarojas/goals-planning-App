@@ -5,6 +5,8 @@ const passport = require("passport");
 const jwtSecret = require("../config/jwtConfig");
 const jwt = require("jsonwebtoken");
 
+// Functions
+
 async function findData(data) {
   const user = await User.find(data);
   return user;
@@ -35,33 +37,38 @@ module.exports = {
   },
 
   // async show(req, res) {
-    // const user = await User.findById(req.params.id);
-    // return res.json(user);
+  // const user = await User.findById(req.params.id);
+  // return res.json(user);
   // },
 
   // Find user
-  show(req, res, next){
-    passport.authenticate('jwt', {session: false}, (error, user, info) =>{
-      console.log(` >>>> CONTROLLER error ${error}, userID ${user._id}, reqID ${req.query.userId} info ${info}`);
-      if(error){
+  show(req, res, next) {
+    passport.authenticate("jwt", { session: false }, (error, user, info) => {
+      console.log(
+        ` >>>> CONTROLLER FIND error ${error}, userID ${user._id}, reqID ${req.query.userId} info ${info}`
+      );
+      if (error) {
         console.log(error);
       }
-      if(info !== undefined){
+      if (info !== undefined) {
         console.log("INFORMATION msg", info.message);
-        res.status(401).send(info.message);
-      } else if( user._id == req.query.userId){
-        User.findById({_id: req.query.userId}).then((userInfo) =>{
-          if (userInfo != null){
-            console.log('User found Controller');
+        res.status(401).send({ 
+          auth: false,
+          message: info.message,
+        });
+      } else if (user._id == req.query.userId) {
+        User.findById({ _id: req.query.userId }).then((userInfo) => {
+          if (userInfo != null) {
+            console.log("User found Controller");
             userInfo.password = undefined;
-            res.status(200).send({ 
+            res.status(200).json({
               status: "success",
               data: userInfo,
               auth: true,
             });
-          } else{
+          } else {
             console.error("not user found");
-            res.status(401).send({ 
+            res.status(401).send({
               status: "failure",
               data: null,
               message: "User not found",
@@ -69,15 +76,15 @@ module.exports = {
             });
           }
         });
-      } else{
-        console.error('jwt id do not match');
+      } else {
+        console.error("jwt id do not match");
         res.status(403).send({
           status: "failure",
-          message: 'id and jwt toke dont matcg',
-          auth: false
-        })
+          message: "id and jwt token do not match",
+          auth: false,
+        });
       }
-    }) (req, res, next);
+    })(req, res, next);
   },
 
   // Query a user information
@@ -125,39 +132,44 @@ module.exports = {
     }
   },
 
-  // Login user
+  // >>> Login
   login(req, res, next) {
     passport.authenticate("local-signin", (error, users, info) => {
+      console.log(`>>> Controller LOGIN errr ${error}, user  ${users}, info ${info}`)
       if (error) {
         console.log(`>>>> Error ${error}`);
       }
       if (info !== undefined) {
         console.log(`Info ${info.message}`);
+        if (info.message === "User not found") {
+          res.status(401).send(info.message);
+        } else {
+          res.status(403).send(info.message);
+        }
       } else {
-        req.logIn(users, () => {
-          if (req.body.username.indexOf("@") === -1) {
-            User.findOne({ username: req.body.username }).then((user) => {
-              const token = jwt.sign({ id: user._id }, jwtSecret.secret, {
-                expiresIn: "1h",
-              });
-              res.status(200).send({
-                auth: true,
-                token,
-                message: "user found and logged in",
-              });
+        req.logIn(users, async () => {
+          try {
+            if (req.body.username.indexOf("@") === -1) {
+              var user = await findUsername(req.body.username);
+            } else {
+              var user = await findEmail(req.body.username);
+            }
+            console.log("USER LOGIN ", user)
+            user.password = undefined;
+            const id = user._id;
+            const token = jwt.sign({ id }, jwtSecret.secret, {
+              expiresIn: 60 * 60,
             });
-          } else {
-            User.findOne({ email: req.body.username }).then((user) => {
-              const id = user._id;
-              const token = jwt.sign({ id: user._id }, jwtSecret.secret, {
-                expiresIn: 60 * 2,
-              });
-              res.status(200).send({
-                auth: true,
-                token,
-                id,
-                message: "user found and logged in",
-              });
+            res.status(200).json({
+              auth: true,
+              token,
+              data: user,
+              message: "User found and logged in",
+            });
+          } catch (error) {
+            res.status(500).json({
+              status: "failure",
+              error: error.message,
             });
           }
         });

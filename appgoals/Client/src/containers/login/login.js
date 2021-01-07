@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import api from "../../services/api";
-import { Redirect } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 import InputLogin from "../../components/login/input";
 import "../userRegister/form.scss";
@@ -8,11 +8,17 @@ import "../userRegister/form.scss";
 class UserLogin extends Component {
   constructor(props) {
     super(props);
+
+    const auth = localStorage.getItem("Auth");
+    console.log("LOGIN AUTH ", auth);
+    if (auth) {
+      this.props.history.push("/profile");
+    }
+
     this.state = {
       data: "",
       password: null,
       isValidData: true,
-      isAuth: false,
       userId: "",
     };
     this.handleChange = this.handleChange.bind(this);
@@ -28,9 +34,12 @@ class UserLogin extends Component {
       });
       console.log("RESPONSE ", response);
       localStorage.setItem("JWT", response.data.token);
+      localStorage.setItem("Auth", true);
+      // localStorage.setItem("UserId", response.data.data._id);
+      localStorage.setItem("User", JSON.stringify(response.data.data));
       return {
         error: false,
-        data: response.data.id,
+        data: response.data,
       };
     } catch (error) {
       return {
@@ -50,11 +59,16 @@ class UserLogin extends Component {
     const value1 = this.state.data;
     const value2 = this.state.password;
     const response = await this.fetchData(value1, value2);
+
     if (response.error) {
-      this.setState({ isValidData: false, isAuth: false });
+      this.setState({ isValidData: false });
       this.clean(event);
     } else {
-      this.setState({ isValidData: true, isAuth: true, userId: response.data });
+      this.setState({ isValidData: true, userId: response.data.data._id });
+      this.props.setContext({ auth: true, user: response.data.data });
+      console.log("LOGIN ", response.data.data);
+      this.props.history.push('/profile');
+      // this.props.history.push("/profile/" + response.data.data._id);
     }
   }
 
@@ -69,8 +83,7 @@ class UserLogin extends Component {
   }
 
   render() {
-    const { isValidData, isAuth, userId } = this.state;
-    console.log("ID: ", userId);
+    const { isValidData } = this.state;
 
     return (
       <form
@@ -111,16 +124,9 @@ class UserLogin extends Component {
             Login
           </button>
         </div>
-
-        <div>
-          {isValidData && isAuth ? (
-            // <Redirect to='/profile' /> : null
-            <Redirect to={`/profile/${userId}`} />
-          ) : null}
-        </div>
       </form>
     );
   }
 }
 
-export default UserLogin;
+export default withRouter(UserLogin);

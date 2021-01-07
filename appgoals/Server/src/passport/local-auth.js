@@ -21,22 +21,29 @@ passport.use(
       passReqToCallback: true,
     },
     async (req, username, password, done) => {
-      if (username.indexOf("@") === -1) {
-        var user = await User.findOne({ username: username });
-      } else {
-        var user = await User.findOne({ email: username });
+      // console.log(`LOCAL AUTH ${username}  ${password}`)
+      try{
+        if (username.indexOf("@") === -1) {
+          var user = await User.findOne({ username: username });
+        } else {
+          var user = await User.findOne({ email: username });
+        }
+        if (!user) {
+          return done(null, false, {message: 'User not found'});
+        }
+        // console.log('COMPARE PAss ', user.comparePassword(password));
+        if (!user.comparePassword(password)) {
+          return done(
+            null,
+            false,
+            {message: 'Password do not match'},
+          );
+        }
+        // console.log(">>>> User ", user);
+        return done(null, user);
+      } catch(error){
+        done(error);
       }
-      if (!user) {
-        return done(null, false);
-      }
-      if (!user.comparePassword(password)) {
-        return done(
-          null,
-          false,
-        );
-      }
-      console.log(">>>> User ", user);
-      return done(null, user);
     }
   )
 );
