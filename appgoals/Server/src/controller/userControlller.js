@@ -45,37 +45,50 @@ module.exports = {
   show(req, res, next) {
     passport.authenticate("jwt", { session: false }, (error, user, info) => {
       console.log(
-        ` >>>> CONTROLLER FIND error ${error}, userID ${user._id}, reqID ${req.query.userId} info ${info}`
+        ` >>>> CONTROLLER FIND error ${error}, , reqID ${req.query.userId} info ${info}`
       );
+      //userID ${user._id}
       if (error) {
-        console.log(error);
+        console.log("CONTROLLER show ", error);
+        res.status(500).json({
+          status: "failure",
+          error: error.message,
+        });
       }
       if (info !== undefined) {
         console.log("INFORMATION msg", info.message);
-        res.status(401).send({ 
+        res.status(401).send({
           auth: false,
           message: info.message,
         });
       } else if (user._id == req.query.userId) {
-        User.findById({ _id: req.query.userId }).then((userInfo) => {
-          if (userInfo != null) {
-            console.log("User found Controller");
-            userInfo.password = undefined;
-            res.status(200).json({
-              status: "success",
-              data: userInfo,
-              auth: true,
-            });
-          } else {
-            console.error("not user found");
-            res.status(401).send({
-              status: "failure",
-              data: null,
-              message: "User not found",
-              auth: false,
-            });
-          }
-        });
+        // try {
+          User.findById({ _id: req.query.userId }).then((userInfo) => {
+            if (userInfo != null) {
+              console.log("User found Controller");
+              userInfo.password = undefined;
+              res.status(200).json({
+                status: "success",
+                data: userInfo,
+                auth: true,
+              });
+            } else {
+              console.error("not user found");
+              res.status(401).send({
+                status: "failure",
+                data: null,
+                message: "User not found",
+                auth: false,
+              });
+            }
+          });
+        // } catch (error) {
+        //   console.error("ERROR SERVER");
+        //   res.status(500).json({
+        //     status: "failure",
+        //     error: error.message,
+        //   });
+        // }
       } else {
         console.error("jwt id do not match");
         res.status(403).send({
@@ -135,7 +148,9 @@ module.exports = {
   // >>> Login
   login(req, res, next) {
     passport.authenticate("local-signin", (error, users, info) => {
-      console.log(`>>> Controller LOGIN errr ${error}, user  ${users}, info ${info}`)
+      console.log(
+        `>>> Controller LOGIN errr ${error}, user  ${users}, info ${info}`
+      );
       if (error) {
         console.log(`>>>> Error ${error}`);
       }
@@ -154,7 +169,7 @@ module.exports = {
             } else {
               var user = await findEmail(req.body.username);
             }
-            console.log("USER LOGIN ", user)
+            console.log("USER LOGIN ", user);
             user.password = undefined;
             const id = user._id;
             const token = jwt.sign({ id }, jwtSecret.secret, {
