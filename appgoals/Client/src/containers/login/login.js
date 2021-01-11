@@ -10,9 +10,9 @@ class UserLogin extends Component {
     super(props);
 
     const auth = localStorage.getItem("Auth");
-    console.log("LOGIN AUTH ", auth);
+    // console.log("LOGIN AUTH ", auth);
     if (auth) {
-      this.props.history.push("/profile");
+      this.props.history.push("/home");
     }
 
     this.state = {
@@ -32,7 +32,7 @@ class UserLogin extends Component {
         username: value1,
         password: password,
       });
-      console.log("RESPONSE ", response);
+      // console.log("RESPONSE ", response);
       localStorage.setItem("JWT", response.data.token);
       localStorage.setItem("Auth", true);
       // localStorage.setItem("UserId", response.data.data._id);
@@ -66,9 +66,9 @@ class UserLogin extends Component {
     } else {
       this.setState({ isValidData: true, userId: response.data.data._id });
       this.props.setContext({ auth: true, user: response.data.data });
-      console.log("LOGIN ", response.data.data);
-      this.props.history.push('/profile');
-      // this.props.history.push("/profile/" + response.data.data._id);
+      // console.log("LOGIN ", response.data.data);
+      this.props.history.push('/home');
+      // this.props.history.push("/home/" + response.data.data._id);
     }
   }
 

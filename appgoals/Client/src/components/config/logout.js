@@ -17,7 +17,6 @@ class Logout extends Component {
   };
 
   render() {
-    console.log("LOGOUT ", this.state.close);
     if (this.state.close) {
       return <Redirect to="/" push={true} />;
     }

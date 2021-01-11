@@ -18,7 +18,6 @@ class ContextProvider extends Component {
   }
 
   render() {
-    console.log("ContextProvider ", this.state);
     return (
       <div>
         <ProfileContext.Provider value={this.state}>

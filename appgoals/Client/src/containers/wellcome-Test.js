@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
-import Header from "../utils/header/";
+import Header from "../utils/header";
 
 class Home extends Component {
   render() {
