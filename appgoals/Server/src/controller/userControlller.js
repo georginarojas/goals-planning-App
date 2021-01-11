@@ -63,25 +63,25 @@ module.exports = {
         });
       } else if (user._id == req.query.userId) {
         // try {
-          User.findById({ _id: req.query.userId }).then((userInfo) => {
-            if (userInfo != null) {
-              console.log("User found Controller");
-              userInfo.password = undefined;
-              res.status(200).json({
-                status: "success",
-                data: userInfo,
-                auth: true,
-              });
-            } else {
-              console.error("not user found");
-              res.status(401).send({
-                status: "failure",
-                data: null,
-                message: "User not found",
-                auth: false,
-              });
-            }
-          });
+        User.findById({ _id: req.query.userId }).then((userInfo) => {
+          if (userInfo != null) {
+            console.log("User found Controller");
+            userInfo.password = undefined;
+            res.status(200).json({
+              status: "success",
+              data: userInfo,
+              auth: true,
+            });
+          } else {
+            console.error("not user found");
+            res.status(401).send({
+              status: "failure",
+              data: null,
+              message: "User not found",
+              auth: false,
+            });
+          }
+        });
         // } catch (error) {
         //   console.error("ERROR SERVER");
         //   res.status(500).json({
@@ -194,10 +194,33 @@ module.exports = {
 
   // Update User
   async update(req, res) {
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
-    return res.json(user);
+    console.log('UPDATE');
+    try {
+      console.log('UPDATE User');
+      const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+      });
+      
+      user.password = undefined;
+      if (user !== null) {
+        return res.status(200).json({
+          status: "Success",
+          data: user,
+          message: "User updated",
+        });
+      } else {
+        return res.status(401).send({
+          status: "failure",
+          data: null,
+          message: "User not found",
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
+        status: "failure",
+        error: error.message,
+      });
+    }
   },
 
   // Delete User
