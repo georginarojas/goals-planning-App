@@ -13,7 +13,6 @@ class InputProfile extends Component {
           id={this.props.name}
           type={this.props.type}
           name={this.props.name}
-          // required
           placeholder={this.props.placeholder}
           onChange={this.props.onChange}
           onBlur={this.props.onBlur}

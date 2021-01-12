@@ -6,7 +6,7 @@ class ContextProvider extends Component {
     super(props);
 
     this.setContext = (context) => {
-      console.log("CONTEXT ", context);
+      // console.log("CONTEXT ", context);
       this.setState(context);
     };
 

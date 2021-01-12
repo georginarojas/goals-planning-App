@@ -1,9 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 
-// class GoBack extends Component {
   function GoBack(){
-  // render() {
     const history = useHistory();
     return (
       <div>
@@ -18,7 +16,6 @@ import { useHistory } from "react-router-dom";
           </button>
       </div>
     );
-  // }
 }
 
 export default GoBack;

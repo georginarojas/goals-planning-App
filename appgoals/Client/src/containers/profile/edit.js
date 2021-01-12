@@ -5,9 +5,9 @@ import { ToastContainer, toast } from "react-toastify";
 
 import VerifyAuth from "../../components/config/verifyAuth";
 import Header from "../../utils/header";
-import Logout from "../../components/config/logout";
-import GoHome from "../../components/config/goHome";
-import GoBack from "../../components/config/goBack";
+import Logout from "../../components/utils/logout";
+import GoHome from "../../components/utils/goHome";
+import GoBack from "../../components/utils/goBack";
 import InputProfile from "../../components/profile/input";
 import SelectRegister from "../../components/profile/select";
 

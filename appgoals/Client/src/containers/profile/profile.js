@@ -5,19 +5,17 @@ import { format } from "date-fns";
 
 import VerifyAuth from "../../components/config/verifyAuth";
 import Header from "../../utils/header";
-import Logout from "../../components/config/logout";
-import GoHome from "../../components/config/goHome";
-import GoBack from "../../components/config/goBack";
+import Logout from "../../components/utils/logout";
+import GoHome from "../../components/utils/goHome";
+import GoBack from "../../components/utils/goBack";
 
 import "../userRegister/form.scss";
 
 class Profile extends Component {
   render() {
-    console.log("PROFILE DATE ", this.props.user.birthdate);
     const value = this.props.user.birthdate.toString();
     var d = new Date(value);
     const formattedDate = format(d, "dd/MM/yyyy");
-    console.log(formattedDate);
 
     return (
       <div className="config-profile">
