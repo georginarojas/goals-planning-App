@@ -1,14 +1,23 @@
 import React, { Component } from "react";
 import { withRouter, Link } from "react-router-dom";
 
+import { format } from "date-fns";
+
 import VerifyAuth from "../../components/config/verifyAuth";
 import Header from "../../utils/header";
 import Logout from "../../components/config/logout";
+import GoHome from "../../components/config/goHome";
+import GoBack from "../../components/config/goBack";
+
 import "../userRegister/form.scss";
 
 class Profile extends Component {
   render() {
-    // console.log("USER ", this.props);
+    console.log("PROFILE DATE ", this.props.user.birthdate);
+    const value = this.props.user.birthdate.toString();
+    var d = new Date(value);
+    const formattedDate = format(d, "dd/MM/yyyy");
+    console.log(formattedDate);
 
     return (
       <div className="config-profile">
@@ -25,21 +34,12 @@ class Profile extends Component {
               <li>User name: {this.props.user.username}</li>
               <li>Email: {this.props.user.email}</li>
               <li>Gender: {this.props.user.gender}</li>
-              <li>Birthdate: {this.props.user.birthdate}</li>
+              <li>Birthdate: {formattedDate}</li>
             </ul>
           </div>
           <div>
             <Link to="/profile/edit">
-              <button
-                type="button"
-                // onClick={(e) => {
-                // e.preventDefault();
-                // this.props.history.push("/profile/edit");
-                // // window.location.href = "http://google.com";
-                // }}
-              >
-                Edit
-              </button>
+              <button type="button">Edit</button>
             </Link>
           </div>
         </form>
@@ -47,6 +47,13 @@ class Profile extends Component {
         <div>
           <Logout />
         </div>
+        <div>
+          <GoHome />
+        </div>
+        <div>
+          <GoBack />
+        </div>
+
       </div>
     );
   }

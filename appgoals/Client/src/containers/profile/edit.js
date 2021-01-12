@@ -6,6 +6,8 @@ import { ToastContainer, toast } from "react-toastify";
 import VerifyAuth from "../../components/config/verifyAuth";
 import Header from "../../utils/header";
 import Logout from "../../components/config/logout";
+import GoHome from "../../components/config/goHome";
+import GoBack from "../../components/config/goBack";
 import InputProfile from "../../components/profile/input";
 import SelectRegister from "../../components/profile/select";
 
@@ -24,17 +26,13 @@ class EditProfile extends Component {
 
   handleData(event) {
     event.preventDefault();
-    console.log("======= EDIT data ");
     if (this.state.name === "") {
-      console.log("======= EDIt name ", this.props.user.name);
       this.setState({ name: this.props.user.name });
     }
     if (this.state.birthdate === null) {
-      console.log("======= EDIT birthdate ", this.props.user.birthdate);
       this.setState({ birthdate: this.props.user.birthdate });
     }
     if (this.state.gender === null) {
-      console.log("======= EDIT gender ", this.props.user.gender);
       this.setState({ gender: this.props.user.gender });
     }
   }
@@ -43,17 +41,14 @@ class EditProfile extends Component {
     let name = event.target.name;
     let value = event.target.value;
     this.setState({ [name]: value });
-  };
+  }
 
   async handleSubmit(event) {
     event.preventDefault();
     const user = JSON.parse(localStorage.getItem("User"));
     if (user !== null) {
       var id = user._id;
-      // console.log("EDIT ", id);
     }
-    // this.handleChange(event);
-    // console.log("EDIT ", this.state.name);
     if (this.state.name !== "") {
       try {
         const response = await api.put(`/user/${id}`, {
@@ -63,26 +58,24 @@ class EditProfile extends Component {
         });
         if (response.data !== null) {
           const message = response.data.message;
-          this.showMessageSuccess(message);
-          console.log("EDIT user updated ", response.data);
+          this.showToast(message, toast.TYPE.SUCCESS);
+          // console.log("EDIT user updated ", response.data);
         } else {
           const message = response.data.message;
-          this.showMessageWarn(message);
-          console.log("EDIT fail ", response.data.message);
+          this.showToast(message, toast.TYPE.WARNING);
         }
       } catch (error) {
-        console.log("EDIT error ", error);
+        // console.log("EDIT error ", error);
         let message = "Error: Server failed ";
-        this.showMessageError(message);
+        this.showToast(message, toast.TYPE.ERROR);
       }
     } else {
       const message = "Sorry, It was not possible to update";
-      this.showMessageWarn(message);
-      console.log("EDIT: ", message);
+      this.showToast(message, toast.TYPE.WARNING);
     }
-  };
+  }
 
-  showMessageError = (message) => {
+  showToast = (message, type) => {
     toast.error(message, {
       position: "top-center",
       autoClose: 5000,
@@ -91,36 +84,13 @@ class EditProfile extends Component {
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-    });
-  };
-
-  showMessageWarn = (message) => {
-    toast.warn(message, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  };
-
-  showMessageSuccess = (message) => {
-    toast.success(message, {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
+      type,
     });
   };
 
   render() {
-    const { name, birthdate, gender } = this.state;
-    console.log("EDIT ", name, birthdate, gender);
+    // const { name, birthdate, gender } = this.state;
+
     return (
       <div className="edit-profile">
         <Header />
@@ -130,6 +100,7 @@ class EditProfile extends Component {
           <form action="edit-user" method="put" onSubmit={this.handleSubmit}>
             <h1>Edit profile</h1>
             <InputProfile
+              className={"singup-input"}
               id={"name"}
               type={"text"}
               name={"name"}
@@ -139,6 +110,7 @@ class EditProfile extends Component {
               onBlur={this.handleData}
             />
             <InputProfile
+              className={"input-blocked"}
               id={"username"}
               type={"text"}
               name={"username"}
@@ -146,6 +118,7 @@ class EditProfile extends Component {
               disabled={true}
             />
             <InputProfile
+              className={"input-blocked"}
               id={"email"}
               type={"text"}
               name={"email"}
@@ -153,6 +126,7 @@ class EditProfile extends Component {
               disabled={true}
             />
             <InputProfile
+              className={"singup-input"}
               id={"birthdate"}
               type={"date"}
               name={"birthdate"}
@@ -162,6 +136,7 @@ class EditProfile extends Component {
               onBlur={this.handleData}
             />
             <SelectRegister
+              className={"singup-input"}
               id={"gender"}
               name={"gender"}
               placeholder={this.props.user.gender}
@@ -174,6 +149,7 @@ class EditProfile extends Component {
                 Update
               </button>
             </div>
+
             <div className="message-toast">
               <ToastContainer
                 newestOnTop={false}
@@ -187,6 +163,12 @@ class EditProfile extends Component {
 
         <div>
           <Logout />
+        </div>
+        <div>
+          <GoHome />
+        </div>
+        <div>
+          <GoBack />
         </div>
       </div>
     );

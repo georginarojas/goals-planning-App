@@ -1,4 +1,4 @@
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route,  BrowserRouter as Router } from "react-router-dom";
 
 import "./utils/css/main.css";
 
@@ -17,69 +17,74 @@ import ContextProvider from "./components/context/contextProvider";
 
 const App = (props) => (
   <div className="App">
-    <Switch>
-      <Route path="/" exact={true} component={Home} />
-      <Route path="/register" component={UserRegisterForm} />
+    <Router>
+      <Switch>
+        <Route path="/" exact={true} component={Home} />
+        <Route path="/register" component={UserRegisterForm} />
 
-      <ContextProvider>
-        <ProfileContext.Consumer>
-          {({ auth, setContext }) => (
-            <Route
-              path="/login"
-              render={(props) => (
-                <UserLogin auth={auth} setContext={setContext}></UserLogin>
-              )}
-            />
-          )}
-        </ProfileContext.Consumer>
+        <ContextProvider>
+          <ProfileContext.Consumer>
+            {({ auth, setContext }) => (
+              <Route
+                path="/login"
+                render={(props) => (
+                  <UserLogin auth={auth} setContext={setContext}></UserLogin>
+                )}
+              />
+            )}
+          </ProfileContext.Consumer>
 
-        <ProfileContext.Consumer>
-          {({ setContext, auth }) => (
-            <Route
-              path="/home"
-              render={(props) => (
-                <HomeProfile auth={auth} setContext={setContext}></HomeProfile>
-              )}
-            />
-          )}
-        </ProfileContext.Consumer>
+          <ProfileContext.Consumer>
+            {({ setContext, auth }) => (
+              <Route
+                path="/home"
+                render={(props) => (
+                  <HomeProfile
+                    auth={auth}
+                    setContext={setContext}
+                  ></HomeProfile>
+                )}
+              />
+            )}
+          </ProfileContext.Consumer>
 
-        <ProfileContext.Consumer>
-          {({ user, auth, setContext }) => (
-            <Route
-              path="/profile"
-              exact
-              render={(props) => (
-                <Profile
-                  auth={auth}
-                  user={user}
-                  setContext={setContext}
-                ></Profile>
-              )}
-            />
-          )}
-        </ProfileContext.Consumer>
+          <ProfileContext.Consumer>
+            {({ user, auth, setContext }) => (
+              <Route
+                path="/profile"
+                exact
+                render={(props) => (
+                  <Profile
+                    auth={auth}
+                    user={user}
+                    setContext={setContext}
+                  ></Profile>
+                )}
+              />
+            )}
+          </ProfileContext.Consumer>
 
-        <ProfileContext.Consumer>
-          {({ user, auth, setContext }) => (
-            <Route
-              path="/profile/edit"
-              exact
-              render={(props) => (
-                <EditProfile
-                  auth={auth}
-                  user={user}
-                  setContext={setContext}
-                ></EditProfile>
-              )}
-            />
-          )}
-        </ProfileContext.Consumer>
-      </ContextProvider>
+          <ProfileContext.Consumer>
+            {({ user, auth, setContext }) => (
+              <Route
+                path="/profile/edit"
+                exact
+                render={(props) => (
+                  <EditProfile
+                    auth={auth}
+                    user={user}
+                    setContext={setContext}
+                  ></EditProfile>
+                )}
+              />
+            )}
+          </ProfileContext.Consumer>
+        </ContextProvider>
 
-      <Route component={Error} />
-      {props.children}
-    </Switch>
+        <Route component={Error} />
+        {props.children}
+      </Switch>
+    </Router>
   </div>
 );
 

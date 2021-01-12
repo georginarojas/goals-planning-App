@@ -72,7 +72,7 @@ class UserRegisterForm extends Component {
         }
       } else {
         let message = "Error: Server failed ";
-        this.showMessageError(message);
+        this.showToast(message, toast.TYPE.ERROR);
         console.log("deu erro", response);
       }
     } else{
@@ -94,7 +94,7 @@ class UserRegisterForm extends Component {
       }
     } else {
       let message = "Error: Server failed ";
-      this.showMessageError(message);
+      this.showToast(message, toast.TYPE.ERROR);
     }
   }
 
@@ -124,20 +124,20 @@ class UserRegisterForm extends Component {
         });
         if (response.data === null) {
           let message = `Error: Was not possible to make the register, ${this.state.username} or ${this.state.email} exist`;
-          this.showMessageError(message);
+          this.showToast(message, toast.TYPE.ERROR);
         } else {
           let message = "User was create with success";
-          this.showMessageSuccess(message);
+          this.showToast(message, toast.TYPE.SUCCESS);
           this.resetForm(event);
         }
       } catch (error) {
         console.log(error);
         let message = "Error: Server failed ";
-        this.showMessageError(message);
+        this.showToast(message, toast.TYPE.ERROR);
       }
     } else {
       let message = `Error: please check the data are correct`;
-      this.showMessageError(message);
+      this.showToast(message, toast.TYPE.ERROR);
       return {
         error: true,
       };
@@ -161,11 +161,11 @@ class UserRegisterForm extends Component {
       } else {
         this.setState({ isSamePassword: false });
         let message = `Passwords don't match`;
-        this.showMessageWarn(message);
+        this.showToast(message, toast.TYPE.WARNING);
       }
     } else {
       let message = "Please confirm the password";
-      this.showMessageWarn(message);
+      this.showToast(message, toast.TYPE.WARNING);
     }
   }
 
@@ -187,7 +187,7 @@ class UserRegisterForm extends Component {
     }
   }
 
-  showMessageError = (message) => {
+  showToast = (message, type) => {
     toast.error(message, {
       position: "top-center",
       autoClose: 5000,
@@ -196,32 +196,10 @@ class UserRegisterForm extends Component {
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
+      type
     });
   };
-
-  showMessageWarn = (message) => {
-    toast.warn(message, {
-      position: "bottom-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  };
-
-  showMessageSuccess = (message) => {
-    toast.success(message, {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  };
+  
 
   resetForm(event) {
     event.preventDefault();
