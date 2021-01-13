@@ -12,10 +12,30 @@ import GoBack from "../../components/utils/goBack";
 import "../userRegister/form.scss";
 
 class Profile extends Component {
+  constructor(props){
+    super(props);
+    this.state={
+      birthdate:"",
+    }
+    this.handleData = this.handleData.bind(this);
+  }
+  componentDidMount(){
+    const user = JSON.parse(localStorage.getItem("User"));
+    this.handleData(user.birthdate);
+  }
+
+  handleData(data){
+    this.setState({birthdate: data});
+  }
+
   render() {
-    const value = this.props.user.birthdate.toString();
-    var d = new Date(value);
-    const formattedDate = format(d, "dd/MM/yyyy");
+    const {birthdate} = this.state;
+    console.log("Profile birthdate ", birthdate);
+    if(birthdate !== ""){
+      const value = birthdate.toString();
+      var d = new Date(value);
+      var formattedDate = format(d, "dd/MM/yyyy");
+    }
 
     return (
       <div className="config-profile">
