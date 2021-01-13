@@ -16,6 +16,10 @@ body {
     font-size: 62.5%;
 }
 
+:root li {
+    margin-bottom: 10px;
+  }
+
 body, 
 button,
 textarea{

@@ -1,9 +1,5 @@
 import { Switch, Route,  BrowserRouter as Router } from "react-router-dom";
 
-import "./utils/css/main.css";
-
-import "./utils/css/button.css";
-
 import Home from "./containers/wellcome-Test";
 import UserRegisterForm from "./containers/userRegister/form";
 import UserLogin from "./containers/login/login";
@@ -13,7 +9,10 @@ import EditProfile from "./containers/profile/edit";
 import ProfileContext from "./components/context/profileContext";
 
 import ContextProvider from "./components/context/contextProvider";
-// import VerifyAuth from "./components/config/verifyAuth";
+
+import "./utils/css/main.css";
+import "./utils/css/button.css";
+
 
 const App = (props) => (
   <div className="App">

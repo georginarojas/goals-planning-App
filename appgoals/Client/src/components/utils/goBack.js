@@ -6,15 +6,15 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 function GoBack() {
   const history = useHistory();
   return (
-    <div className="utils-button">
+    <div >
       <button
         type="button"
-        className="button-goBack"
+        className="utils-button"
         onClick={() => {
           history.goBack();
         }}
       >
-        <FontAwesomeIcon icon={faArrowLeft} />
+        <FontAwesomeIcon icon={faArrowLeft} size="lg"/>
       </button>
     </div>
   );

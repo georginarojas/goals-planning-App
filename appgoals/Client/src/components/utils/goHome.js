@@ -9,7 +9,7 @@ class GoHome extends Component {
       <div >
         <Link to="/home">
           <button type="button" className="utils-button">
-            <FontAwesomeIcon icon={faHome} color="blue" size="lg"/>
+            <FontAwesomeIcon icon={faHome} color="blue" size="lg" />
           </button>
         </Link>
       </div>
