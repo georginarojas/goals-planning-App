@@ -7,7 +7,7 @@ class MenuBtn extends Component {
     return (
       <div>
         <button className="menu-btn" onMouseDown={this.props.handleMenu}>
-          <FontAwesomeIcon icon={faBars} />
+          <FontAwesomeIcon icon={faBars} size="lg" />
         </button>
       </div>
     );

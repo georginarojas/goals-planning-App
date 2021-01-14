@@ -1,21 +1,77 @@
-#menu{
-    width: 30vw;
-    height: 100vh;
-    background-color: red;
-    position: fixed;
-    top: 0;
-    left: 0;
-    transition: transform .3s cubic-bezier(0, .52, 0, 1);
-    overflow: scroll;
-    z-index: 1000;
+#menu {
+  display: block;
+  width: 25vw;
+  height: 92vh;
+  /* height: calc(100vh - 60px); */
+  background-color: #ebebee;
+  position: fixed;
+  top: 8vh;
+  left: 0px;
+  transition: transform 0.3s cubic-bezier(0, 0.52, 0, 1);
+  overflow: scroll;
+  z-index: 1000;
 }
 
-#menu.hide{
-    /* transform: translate3d(-100vw, 0, 0); */
-    transform: translate(-100%) ;
+#menu.hide {
+  /* transform: translate3d(-100vw, 0, 0); */
+  transform: translate(-100%);
 }
 
-#menu.show{
-    transform: translate3d(0vw, 0, 0);
-    overflow: hidden;
+#menu.show {
+  transform: translate3d(0vw, 0, 0);
+  overflow: hidden;
 }
+
+.menu-links ul li {
+  font-size: 2rem;
+  text-align: left;
+  left: 100px;
+  color: rgb(71, 63, 63);
+}
+
+/* ------------ */
+/* #menu-links{
+    position: absolute;
+    height: calc(100vh - 60px);
+    width: 210px;
+    background-color: white;
+    transform: translateX(-100%);
+    transition: transform 300ms;
+  
+} */
+
+#menu-links ul {
+  margin-top: 0px;
+  padding: 0px;
+  color: rgb(112, 104, 104);
+  list-style-type: none;
+  text-align: left;
+}
+
+#menu li {
+  padding: 10px 0 20px 20px;
+  font-size: 1.8rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.14);
+}
+#menu li:last-child {
+  border-bottom: none;
+}
+
+
+.menu-icon{
+  font-size: 2.5rem;
+  /* color: rgb(231, 31, 31); */
+  padding-right: 8px;
+}
+
+.link{
+  font-size: 2rem;
+  color: rgb(40, 41, 58);
+  text-decoration: none;
+  /* padding-right: 8px; */
+}
+
+
+/*  li a
+  text-decoration: none
+  color: black */

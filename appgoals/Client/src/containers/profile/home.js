@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Header from "../../utils/header";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 import VerifyAuth from "../../components/config/verifyAuth";
 import Logout from "../../components/utils/logout";
@@ -34,15 +34,14 @@ class HomeProfile extends Component {
         <div>
           <Header />
           <MenuBtn handleMenu={this.handleMenu} />
-          <Menu handleMenu={this.handleMenu} menuVisibility={this.state.show} />
           <VerifyAuth props={this.props} />
         </div>
-        <br />
-
-        <p>Home Profile</p>
-
-        <Link to="/profile">Data user</Link>
-
+        <div className="menu-bar">
+          <Menu handleMenu={this.handleMenu} menuVisibility={this.state.show} />
+        </div>
+          <br />
+          <p>Home Profile</p>
+         
         <div>
           <Logout />
         </div>
