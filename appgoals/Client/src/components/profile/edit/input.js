@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./input.css";
-import "../../containers/userRegister/form.scss";
+import "../../../containers/userRegister/form.scss";
 
 
 class InputProfile extends Component {

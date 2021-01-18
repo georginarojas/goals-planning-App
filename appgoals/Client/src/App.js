@@ -1,4 +1,4 @@
-import { Switch, Route,  BrowserRouter as Router } from "react-router-dom";
+import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
 
 import Home from "./containers/wellcome-Test";
 import UserRegisterForm from "./containers/userRegister/form";
@@ -6,13 +6,13 @@ import UserLogin from "./containers/login/login";
 import HomeProfile from "./containers/profile/home";
 import Profile from "./containers/profile/profile";
 import EditProfile from "./containers/profile/edit";
-import ProfileContext from "./components/context/profileContext";
+import List from "./containers/features/list";
 
+import ProfileContext from "./components/context/profileContext";
 import ContextProvider from "./components/context/contextProvider";
 
 import "./utils/css/main.css";
 import "./utils/css/button.css";
-
 
 const App = (props) => (
   <div className="App">
@@ -75,6 +75,16 @@ const App = (props) => (
                     setContext={setContext}
                   ></EditProfile>
                 )}
+              />
+            )}
+          </ProfileContext.Consumer>
+
+          <ProfileContext.Consumer>
+            {({ setContext }) => (
+              <Route
+                path="/list"
+                exact
+                render={(props) => <List setContext={setContext} />}
               />
             )}
           </ProfileContext.Consumer>

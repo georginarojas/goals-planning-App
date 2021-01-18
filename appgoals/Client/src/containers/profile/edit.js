@@ -4,12 +4,12 @@ import { withRouter } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
 import VerifyAuth from "../../components/config/verifyAuth";
-import Header from "../../utils/header";
+import Header from "../../components/utils/header";
 import Logout from "../../components/utils/logout";
 import GoHome from "../../components/utils/goHome";
 import GoBack from "../../components/utils/goBack";
-import InputProfile from "../../components/profile/input";
-import SelectRegister from "../../components/profile/select";
+import InputProfile from "../../components/profile/edit/input";
+import SelectRegister from "../../components/profile/edit/select";
 
 class EditProfile extends Component {
   constructor(props) {

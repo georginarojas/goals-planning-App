@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import "../../containers/userRegister/form.scss";
-import "../userRegister/select.css";
+import "../../../containers/userRegister/form.scss";
+import "../../userRegister/select.css";
 
 class SelectRegister extends Component {
   render() {

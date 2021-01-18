@@ -1,5 +1,5 @@
 import React from 'react';
-import "./styles.css";
+import "./header.css";
 
 const Header = () => (
     <header id="main-header">Planning</header>

@@ -1,0 +1,53 @@
+#card{
+    width: 70vw;
+    height: 10vh;
+    background-color: #7dbbbd;
+}
+
+
+/* =============== Card bar =============== */
+
+#card-goals{
+    width: 70vw;
+    height: 15vh;
+    background-color: #7dbbbd;
+}
+
+#card-goals.hide{
+    transform: translate(-100%);
+}
+
+#card-goals.show{
+    transform: translate3d(0, 0, 0);
+    overflow: hidden;
+}
+
+#card-tasks{
+    width: 70vw;
+    height: 15vh;
+    background-color: #7dbbbd;
+}
+
+#card-tasks.hide{
+    transform: translate(-100%);
+}
+
+#card-tasks.show{
+    transform: translate3d(0, 0, 0);
+    overflow: hidden;
+}
+
+#card-list{
+    width: 70vw;
+    height: 15vh;
+    background-color: #7dbbbd;
+}
+
+#card-list.hide{
+    transform: translate(-100%);
+}
+
+#card-list.show{
+    transform: translate3d(0, 0, 0);
+    overflow: hidden;
+}

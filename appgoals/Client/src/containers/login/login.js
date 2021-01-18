@@ -3,6 +3,7 @@ import api from "../../services/api";
 import { withRouter } from "react-router-dom";
 
 import InputLogin from "../../components/login/input";
+import Header from "../../components/utils/header";
 import "../userRegister/form.scss";
 
 class UserLogin extends Component {
@@ -86,7 +87,9 @@ class UserLogin extends Component {
     const { isValidData } = this.state;
 
     return (
-      <form
+      <div id="login">
+        <Header />
+        <form
         action="authentication-user"
         method="post"
         onSubmit={this.handleSubmit}
@@ -125,6 +128,8 @@ class UserLogin extends Component {
           </button>
         </div>
       </form>
+
+      </div>
     );
   }
 }
