@@ -1,37 +1,48 @@
 import React, { Component } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 import Header from "../../components/utils/header";
+import CheckButton from "../../components/utils/checkBtn";
 
 class List extends Component {
   constructor(props) {
     super(props);
     this.state = {
       list: [],
-      isNewEl: false,
+      isCheck: [],
       tittle: "",
     };
-    this.toggleNewEl = this.toggleNewEl.bind(this);
+
     this.addElement = this.addElement.bind(this);
-    this.handleChangeList = this.handleChangeList.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.removeElement = this.removeElement.bind(this);
+    
+    this.toggleCheck = this.toggleCheck.bind(this);
   }
 
-  toggleNewEl(e) {
+  toggleCheck(i, e){
     e.preventDefault();
-    this.setState({ isNewEl: true });
-  }
-
-  handleChangeList(e) {
-    e.preventDefault();
-    let name = e.target.name;
-    let value = e.target.value;
-    this.setState({ [name]: value });
+    console.log("Toggle checkBtn i ", i)
+    let isCheck = [...this.state.isCheck];
+    isCheck[i] = !this.state.isCheck[i];
+    this.setState({ isCheck});
   }
 
   handleChange(i, event) {
-    console.log("Handle change 2 i: ", i);
-    let list = [...this.state.list];
-    list[i] = event.target.value;
-    this.setState({ list });
+    event.preventDefault();
+    console.log("EVENt target ", event.target);
+    if (event.target.className === "element-input") {
+      console.log("Handle change map i: ", i);
+      let list = [...this.state.list];
+      list[i] = event.target.value;
+      this.setState({ list });
+    } else {
+      console.log("Handle change ");
+      let name = event.target.name;
+      let value = event.target.value;
+      this.setState({ [name]: value });
+    }
   }
 
   addElement(e) {
@@ -40,7 +51,8 @@ class List extends Component {
     this.setState((prevState) => ({ list: [...prevState.list, ""] }));
   }
 
-  removeElement(i) {
+  removeElement(i, e) {
+    e.preventDefault();
     console.log("remove  i", i);
     let list = [...this.state.list];
     list.splice(i, 1);
@@ -48,8 +60,8 @@ class List extends Component {
   }
 
   render() {
-    const { isNewEl, list } = this.state;
-    console.log("LISt ", list);
+    const { list, isCheck } = this.state;
+    console.log("LISt isCheck ", list, isCheck);
     return (
       <div className="list">
         <Header />
@@ -59,7 +71,7 @@ class List extends Component {
             type="text"
             name="tittle"
             placeholder="Tittle"
-            onChange={this.handleChangeList}
+            onChange={(e) => this.handleChange(null, e)}
           />
 
           {list.map((el, i) => {
@@ -69,13 +81,16 @@ class List extends Component {
                 <input
                   type="text"
                   value={el || ""}
-                  onChange={this.handleChange.bind(this, i)}
+                  className="element-input"
+                  // onChange={this.handleChange.bind(this, i)}
+                  onChange={(e) => this.handleChange(i, e)}
                 />
-                <input
-                  type="button"
-                  value="Remove"
-                  onClick={this.removeElement.bind(this, i)}
-                />
+                <button onClick={(e) => this.removeElement(i, e)} >
+                  <FontAwesomeIcon icon={faTimes} />
+                </button>
+                <span onClick={(e) => this.toggleCheck(i, e)}>
+                  <CheckButton isCheck={isCheck[i]} />
+                </span>
               </div>
             );
           })}
