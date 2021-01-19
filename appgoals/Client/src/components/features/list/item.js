@@ -5,7 +5,6 @@ import CheckButton from "../../utils/checkBtn";
 
 const Item = (props) => {
   const markDone = () => {
-      console.log("markDone");
     let currentItem = props.item;
     props.completeItem(currentItem);
   };
