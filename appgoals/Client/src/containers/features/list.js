@@ -9,13 +9,21 @@ class List extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      tittle: "",
       list: [],
       finished: 0,
       percentDone: 0,
     };
+    this.handleChange = this.handleChange.bind(this);
     this.addItem = this.addItem.bind(this);
     this.updateListAfterDeletion = this.updateListAfterDeletion.bind(this);
     this.completeItem = this.completeItem.bind(this);
+  }
+
+  handleChange(e) {
+    let name = e.target.name;
+    let value = e.target.value;
+    this.setState({ [name]: value });
   }
 
   addItem(item) {
@@ -72,6 +80,12 @@ class List extends Component {
       <div>
         <Header />
         <h3> List:</h3>
+        <input
+          type="text"
+          name="tittle"
+          placeholder="Tittle"
+          onChange={this.handleChange}
+        />
         <ItemStats
           list={list}
           percentDone={percentDone}
