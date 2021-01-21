@@ -5,6 +5,7 @@ import ItemStats from "../../components/utils/itemStats";
 import AddItem from "../../components/features/list/addItem";
 import ItemsList from "../../components/features/list/itemList";
 import SelectPriority from "../../components/utils/selectPriority";
+import RadioPriority from "../../components/utils/radioPriority";
 
 class List extends Component {
   constructor(props) {
@@ -23,6 +24,8 @@ class List extends Component {
   }
 
   handleChange(e) {
+    console.log("Value  name ", e.target.value, e.target.name);
+    console.log("Target ", e.target);
     let name = e.target.name;
     let value = e.target.value;
     this.setState({ [name]: value });
@@ -33,7 +36,7 @@ class List extends Component {
     let priority = this.state.priority;
     let el = { item, completed: false , priority};
     list.push(el);
-    this.setState({ list, priority: "normal" }, () => {
+    this.setState({ list, priority: "low" }, () => {
       this.countFinishedItems();
     });
     // this.setState({});
@@ -91,6 +94,7 @@ class List extends Component {
           placeholder="Title"
           onChange={this.handleChange}
         />
+
         <ItemStats
           list={list}
           percentDone={percentDone}
@@ -98,11 +102,18 @@ class List extends Component {
           name={"items"}
         />
 
-        <SelectPriority
+        {/* <SelectPriority
           value={priority}
           onChange={this.handleChange}
           name={"priority"}
           id={"select-priority-list"}
+        /> */}
+
+        <RadioPriority 
+          id={"radio-priority-list"}
+          name={"priority"}
+          value={priority}
+          onChange={this.handleChange}
         />
 
         <AddItem addNewItem={this.addItem} />

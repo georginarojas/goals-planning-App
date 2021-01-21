@@ -7,9 +7,11 @@ class PriorityBtn extends Component {
     switch (priority) {
       case "high":
         return "red";
-      case "normal":
+      case "medium":
         return "yellow";
       case "low":
+        return "green";
+      default:
         return "green";
     }
   };
@@ -17,7 +19,10 @@ class PriorityBtn extends Component {
     return (
       <div>
         <button>
-          <FontAwesomeIcon icon={faCircle} color={this.color(this.props.item.priority)} />
+          <FontAwesomeIcon
+            icon={faCircle}
+            color={this.color(this.props.item.priority)}
+          />
         </button>
       </div>
     );

@@ -16,6 +16,7 @@ class AddItem extends Component {
           type="text"
           placeholder="New item"
           onKeyPress={this.onInputEnter.bind(this)}
+          required
         />
       </div>
     );
