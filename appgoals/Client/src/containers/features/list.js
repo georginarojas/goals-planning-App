@@ -4,12 +4,14 @@ import Header from "../../components/utils/header";
 import ItemStats from "../../components/utils/itemStats";
 import AddItem from "../../components/features/list/addItem";
 import ItemsList from "../../components/features/list/itemList";
+import SelectPriority from "../../components/utils/selectPriority";
 
 class List extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tittle: "",
+      title: "",
+      priority: "normal",
       list: [],
       finished: 0,
       percentDone: 0,
@@ -28,11 +30,13 @@ class List extends Component {
 
   addItem(item) {
     let list = this.state.list;
-    let el = { item, completed: false };
+    let priority = this.state.priority;
+    let el = { item, completed: false , priority};
     list.push(el);
-    this.setState({ list }, () => {
+    this.setState({ list, priority: "normal" }, () => {
       this.countFinishedItems();
     });
+    // this.setState({});
   }
 
   completeItem(currentItem) {
@@ -74,16 +78,17 @@ class List extends Component {
   }
 
   render() {
-    let { list, percentDone, finished } = this.state;
-    console.log(`Percent: ${percentDone}, Completed: ${finished}`);
+    let { list, percentDone, finished, priority } = this.state;
+    // console.log(`Percent: ${percentDone}, Completed: ${finished}`);
+    console.log("Priority ", priority);
     return (
       <div>
         <Header />
         <h3> List:</h3>
         <input
           type="text"
-          name="tittle"
-          placeholder="Tittle"
+          name="title"
+          placeholder="Title"
           onChange={this.handleChange}
         />
         <ItemStats
@@ -92,6 +97,14 @@ class List extends Component {
           finished={finished}
           name={"items"}
         />
+
+        <SelectPriority
+          value={priority}
+          onChange={this.handleChange}
+          name={"priority"}
+          id={"select-priority-list"}
+        />
+
         <AddItem addNewItem={this.addItem} />
         <ItemsList
           items={list}
