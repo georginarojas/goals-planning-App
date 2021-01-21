@@ -2,6 +2,7 @@ import React from "react";
 
 import DeleteItem from "./deleteItem";
 import CheckButton from "../../utils/checkBtn";
+import PriorityBtn from "../../utils/priorityBtn";
 
 const Item = (props) => {
   const markDone = () => {
@@ -20,6 +21,12 @@ const Item = (props) => {
         <p>{name}</p>
       </div>
       <DeleteItem
+        item={props.item}
+        list={props.list}
+        idx={props.idx}
+        updateList={props.updateList}
+      />
+      <PriorityBtn
         item={props.item}
         list={props.list}
         idx={props.idx}

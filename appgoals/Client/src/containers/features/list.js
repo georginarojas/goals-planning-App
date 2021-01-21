@@ -11,7 +11,7 @@ class List extends Component {
     super(props);
     this.state = {
       title: "",
-      priority: "normal",
+      priority: "low",
       list: [],
       finished: 0,
       percentDone: 0,
