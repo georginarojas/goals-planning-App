@@ -4,7 +4,6 @@ import Header from "../../components/utils/header";
 import ItemStats from "../../components/utils/itemStats";
 import AddItem from "../../components/features/list/addItem";
 import ItemsList from "../../components/features/list/itemList";
-// import SelectPriority from "../../components/utils/selectPriority";
 import RadioPriority from "../../components/utils/radioPriority";
 
 class List extends Component {
@@ -53,13 +52,18 @@ class List extends Component {
 
   countFinishedItems() {
     let listItems = this.state.list;
-    let finished = 0;
-    // Usar Array.reduce
-    for (let i = 0; i < listItems.length; i++) {
-      if (listItems[i].completed) {
-        finished++;
-      }
-    }
+    // let finished = 0;
+    // for (let i = 0; i < listItems.length; i++) {
+    //   if (listItems[i].completed) {
+    //     finished++;
+    //   }
+    // }
+
+    // >>>> Using Array.reduce  
+    let finished = listItems.reduce((prev, curr) => {
+      return (curr.completed)? prev+1 : prev;
+    }, 0);
+
     this.setState({ finished }, () => {
       this.percentCompletion();
     });
@@ -74,7 +78,7 @@ class List extends Component {
   }
 
   updateList(list) {
-    console.log("****** UPDATE ", list);
+    // console.log("****** UPDATE ", list);
     this.setState({ list }, () => {
       this.countFinishedItems();
     });

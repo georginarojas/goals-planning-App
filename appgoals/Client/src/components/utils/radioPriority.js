@@ -7,13 +7,13 @@ const RadioPriority = (props) => {
   if (props.visibility) {
     visibility = "show";
   }
-  console.log(
-    "RADIO Id, className, visibility value ",
-    props.id,
-    props.name,
-    visibility,
-    props.value
-  );
+  // console.log(
+  //   "RADIO Id, className, visibility value ",
+  //   props.id,
+  //   props.name,
+  //   visibility,
+  //   props.value
+  // );
   return (
     <div
       id={props.id}
