@@ -1,0 +1,14 @@
+#radio-priority-item{
+    width: 12vw;
+    height: 12vh;
+    background-color: #9e4d27;
+}
+
+#radio-priority-item.show{
+    transform: translate3d(0, 0, 0);
+    overflow: hidden;
+}
+
+#radio-priority-item.hide{
+    transform: translate(-100%);
+}

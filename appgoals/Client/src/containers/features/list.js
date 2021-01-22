@@ -4,7 +4,7 @@ import Header from "../../components/utils/header";
 import ItemStats from "../../components/utils/itemStats";
 import AddItem from "../../components/features/list/addItem";
 import ItemsList from "../../components/features/list/itemList";
-import SelectPriority from "../../components/utils/selectPriority";
+// import SelectPriority from "../../components/utils/selectPriority";
 import RadioPriority from "../../components/utils/radioPriority";
 
 class List extends Component {
@@ -19,13 +19,11 @@ class List extends Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.addItem = this.addItem.bind(this);
-    this.updateListAfterDeletion = this.updateListAfterDeletion.bind(this);
+    this.updateList = this.updateList.bind(this);
     this.completeItem = this.completeItem.bind(this);
   }
 
   handleChange(e) {
-    console.log("Value  name ", e.target.value, e.target.name);
-    console.log("Target ", e.target);
     let name = e.target.name;
     let value = e.target.value;
     this.setState({ [name]: value });
@@ -35,11 +33,11 @@ class List extends Component {
     let list = this.state.list;
     let priority = this.state.priority;
     let el = { item, completed: false , priority};
-    list.push(el);
-    this.setState({ list, priority: "low" }, () => {
+    //list.push(el);
+    let x = [...list, el];
+    this.setState({ list: x, priority: "low" }, () => {
       this.countFinishedItems();
     });
-    // this.setState({});
   }
 
   completeItem(currentItem) {
@@ -56,6 +54,7 @@ class List extends Component {
   countFinishedItems() {
     let listItems = this.state.list;
     let finished = 0;
+    // Usar Array.reduce
     for (let i = 0; i < listItems.length; i++) {
       if (listItems[i].completed) {
         finished++;
@@ -74,7 +73,8 @@ class List extends Component {
     this.setState({ percentDone });
   }
 
-  updateListAfterDeletion(list) {
+  updateList(list) {
+    console.log("****** UPDATE ", list);
     this.setState({ list }, () => {
       this.countFinishedItems();
     });
@@ -83,7 +83,6 @@ class List extends Component {
   render() {
     let { list, percentDone, finished, priority } = this.state;
     // console.log(`Percent: ${percentDone}, Completed: ${finished}`);
-    console.log("Priority ", priority);
     return (
       <div>
         <Header />
@@ -114,12 +113,13 @@ class List extends Component {
           name={"priority"}
           value={priority}
           onChange={this.handleChange}
+          visibility={true}
         />
 
         <AddItem addNewItem={this.addItem} />
         <ItemsList
           items={list}
-          updateList={this.updateListAfterDeletion}
+          updateList={this.updateList}
           completeItem={this.completeItem}
         />
       </div>
