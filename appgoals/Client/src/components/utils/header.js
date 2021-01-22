@@ -1,8 +1,13 @@
-import React from 'react';
+import React from "react";
 import "./header.css";
 
+import logo from "../../utils/images/logo.png";
+
 const Header = () => (
-    <header id="main-header">Planning</header>
+  <div id="header-logo">
+    <img  src={logo} alt="Logo" />
+    <header >Planner</header>
+  </div>
 );
 
 export default Header;
