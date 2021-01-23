@@ -20,6 +20,8 @@ class List extends Component {
     this.addItem = this.addItem.bind(this);
     this.updateList = this.updateList.bind(this);
     this.completeItem = this.completeItem.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    // this.filterList = this.filterList.bind(this);
   }
 
   handleChange(e) {
@@ -28,10 +30,11 @@ class List extends Component {
     this.setState({ [name]: value });
   }
 
+  // ----- ADD NEW ITEM -------- //
   addItem(item) {
     let list = this.state.list;
     let priority = this.state.priority;
-    let el = { item, completed: false , priority};
+    let el = { item, completed: false, priority };
     //list.push(el);
     let x = [...list, el];
     this.setState({ list: x, priority: "low" }, () => {
@@ -39,6 +42,7 @@ class List extends Component {
     });
   }
 
+  // ----- SET COMPLETED FIELD -------- //
   completeItem(currentItem) {
     let listItems = this.state.list;
     for (let i = 0; i < listItems.length; i++) {
@@ -50,6 +54,7 @@ class List extends Component {
     }
   }
 
+  // ----- COUNTER FINISHED_ITEMS -------- //
   countFinishedItems() {
     let listItems = this.state.list;
     // let finished = 0;
@@ -59,9 +64,9 @@ class List extends Component {
     //   }
     // }
 
-    // >>>> Using Array.reduce  
+    // >>>> Using Array.reduce
     let finished = listItems.reduce((prev, curr) => {
-      return (curr.completed)? prev+1 : prev;
+      return curr.completed ? prev + 1 : prev;
     }, 0);
 
     this.setState({ finished }, () => {
@@ -69,6 +74,7 @@ class List extends Component {
     });
   }
 
+  // ----- PERCENT COMPLETION ITEM -------- //
   percentCompletion() {
     let totalItems = this.state.list.length,
       finishedItems = this.state.finished,
@@ -77,11 +83,37 @@ class List extends Component {
     this.setState({ percentDone });
   }
 
+  // ----- UPDATE LIST -------- //
   updateList(list) {
     // console.log("****** UPDATE ", list);
     this.setState({ list }, () => {
       this.countFinishedItems();
     });
+  }
+
+  
+  // ----- SUBMIT LIST -------- //
+  handleSubmit(e){
+    e.preventDefault();
+    let { list, title} = this.state;
+    let newList = this.filterList(list);
+    console.log(">> FILTER list ", newList);
+
+    if(title === "" ){
+      console.log("error")
+    } else{
+      console.log("SUBMIT")
+
+    }
+  }
+
+  // ----- FILTER LIST -------- //
+  filterList= (list) =>{
+  let newList =  list.filter((curr) => {
+      return curr.item !== "";
+    });
+    console.log("FILTER ", newList);
+    return newList;
   }
 
   render() {
@@ -96,6 +128,7 @@ class List extends Component {
           name="title"
           placeholder="Title"
           onChange={this.handleChange}
+          required
         />
 
         <ItemStats
@@ -105,14 +138,7 @@ class List extends Component {
           name={"items"}
         />
 
-        {/* <SelectPriority
-          value={priority}
-          onChange={this.handleChange}
-          name={"priority"}
-          id={"select-priority-list"}
-        /> */}
-
-        <RadioPriority 
+        <RadioPriority
           id={"radio-priority-list"}
           name={"priority"}
           value={priority}
@@ -126,6 +152,12 @@ class List extends Component {
           updateList={this.updateList}
           completeItem={this.completeItem}
         />
+
+        <div>
+          <button type="submit" onClick={this.handleSubmit}>
+            Save
+          </button>
+        </div>
       </div>
     );
   }
