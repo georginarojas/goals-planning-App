@@ -1,20 +1,85 @@
 Functional requirements:
 
+Structure:
+                            ---------------
+                            |     User    |
+                            ---------------
+                                   | 
+                _________________________________________                                    
+                |                   |                   |
+            ----------         ----------           ---------- 
+            | Goal n |         | Goal n |    ...    | Goal n |
+            ----------         ----------           ----------                   
+                |
+      ___________________
+      |                 |
+-------------     -------------
+| Mission 1 | ... | Mission n |
+-------------     -------------
+      |                 | 
+------------       ------------    
+|  Task 1  |       |  Task 1  |
+------------       ------------    
+      .                 .
+      .                 .
+      .                 .
+------------       ------------    
+|  Task n  |       |  Task n  |
+------------       ------------    
 
->> Users 
+
+>> Users model
     attribute: {
+        _id
         name
         username
-        age
+        email
+        gender
+        birthdate
         password
+        createdAt
+        
     }
-    methods CRUD 
-    * Create
-    * Read
-    * Update
-    * Delete
     
+>> Goal model 
+    attribute: {
+        _id
+        title
+        time
+        createdAt
+        userId
+    }
 
->> Task
+>> Mission model 
+    attribute: {
+        _id
+        title
+        createdAt
+        userId
+        goalId
+    }
 
->> Goals
+>> Tasks model 
+    attribute: {
+        _id
+        createdAt
+        userId
+        missionId
+        listTasks :{
+            item
+            completed
+            priority
+        }
+    }
+
+methods CRUD 
+* Create
+* Read
+* Update
+* Delete
+
+
+Features:
+
+    Weighing:
+        The weight will be calculated by the sum of all the tasks, the result is equal to 100%
