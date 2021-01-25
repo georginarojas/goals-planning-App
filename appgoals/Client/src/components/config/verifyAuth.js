@@ -22,7 +22,7 @@ const VerifyAuth = (props) => {
   const getUser = async () => {
     try {
       const userId = user._id;
-      const response = await api.get("/findUser", {
+      const response = await api.get("/auth", {
         params: { userId },
         headers: { Authorization: `JWT ${jwt}` },
       });

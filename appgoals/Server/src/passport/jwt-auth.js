@@ -17,37 +17,15 @@ passport.use(
       console.log(">>> JWT_payload", jwt_payload);
       const user = await User.findOne({ _id: jwt_payload.id });
       if (user) {
-        console.log("JWT AUTH User found", user._id);
+        // console.log("JWT AUTH User found", user._id);
         done(null, user._id);
       } else {
-        console.log("User not found");
+        // console.log("User not found");
         done(null, false, { message: "User not found" });
       }
     } catch (error) {
-      console.log(">>> JWT_payload ERROr");
+      // console.log(">>> JWT_payload ERROr");
        return done(error);
     }
   })
 );
-
-// passport.use(
-//     'jwt',
-//     new JWTstrategy(opts, (jwt_payload, done) => {
-//         try{
-//             console.log(">>> JWT_payload", jwt_payload);
-//             User.findOne({ _id: jwt_payload.id}).then(user => {
-//                 if(user){
-//                     console.log('JWT AUTH User found', user._id);
-//                     done(null, user._id);
-//                 } else{
-//                     console.log("User not found");
-//                     done(null, false, {message: 'User not found'});
-//                 }
-//             });
-//         } catch (error){
-//             console.log(">>> JWT_payload ERROr");
-//             done(error);
-//         }
-
-//     }),
-// );

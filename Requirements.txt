@@ -55,21 +55,17 @@ Structure:
         _id
         title
         createdAt
-        userId
         goalId
     }
 
->> Tasks model 
+>> Task model 
     attribute: {
         _id
         createdAt
-        userId
         missionId
-        listTasks :{
-            item
-            completed
-            priority
-        }
+        item
+        completed
+        priority
     }
 
 methods CRUD 

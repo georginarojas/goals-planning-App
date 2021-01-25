@@ -6,10 +6,6 @@ const MissionScheme = new mongoose.Schema(
       type: String,
       require: true,
     },
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
     goalId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Goal",

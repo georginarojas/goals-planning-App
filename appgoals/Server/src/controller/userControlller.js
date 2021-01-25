@@ -4,45 +4,88 @@ const User = mongoose.model("User");
 const passport = require("passport");
 const jwtSecret = require("../config/jwtConfig");
 const jwt = require("jsonwebtoken");
+const { use } = require("../router");
 
-// Functions
-
+//------- Functions --------//
 async function findData(data) {
   const user = await User.find(data);
   return user;
 }
-
 async function findUsername(username) {
   if (username.indexOf("@") === -1) {
     const user = await User.findOne({ username }).exec();
     return user;
   }
 }
-
 async function findEmail(email) {
   let re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   if (re.test(email)) {
     return await User.findOne({ email }).exec();
   }
 }
-
 //------------------------------
 
 module.exports = {
-  // Index
+  //*****************************//
+  // --------- Index ------------//
+  //*****************************//
   async index(req, res) {
     const users = await User.find();
 
     return res.json(users);
   },
+  //****************************************//
+  //------- Query a user information -------//
+  //****************************************//
+  async query(req, res) {
+    try {
+      const { search_field, search_value } = req.query;
+      const data = {};
+      if (search_field !== "" && search_value !== "") {
+        data[search_field] = search_value;
+      }
+      const user = await findData(data);
 
-  // async show(req, res) {
-  // const user = await User.findById(req.params.id);
-  // return res.json(user);
-  // },
+      return res.json(user);
+    } catch (error) {
+      res.status(500).json({
+        status: "failure",
+        error: error.message,
+      });
+    }
+  },
+  //*******************************//
+  //------- Save a new user -------//
+  //*******************************//
+  async store(req, res) {
+    try {
+      const usernameObj = await findUsername(req.body.username);
+      const emailObj = await findEmail(req.body.email);
 
-  // Find user
-  show(req, res, next) {
+      if (usernameObj === null && emailObj === null) {
+        const user = await User.create(req.body);
+        return res.status(201).json({
+          status: "created",
+          data: user,
+        });
+      } else {
+        return res.status(400).json({
+          status: "failure",
+          error: "Was not possible to create a user",
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
+        status: "failure",
+        error: error.message,
+      });
+    }
+  },
+
+  //************************************************//
+  // ------- Find user (user loged) ------------//
+  //************************************************//
+  veryfyJwt(req, res, next) {
     passport.authenticate("jwt", { session: false }, (error, user, info) => {
       console.log(
         ` >>>> CONTROLLER FIND error ${error}, , reqID ${req.query.userId} info ${info}`
@@ -100,52 +143,9 @@ module.exports = {
     })(req, res, next);
   },
 
-  // Query a user information
-  async query(req, res) {
-    try {
-      const { search_field, search_value } = req.query;
-      const data = {};
-      if (search_field !== "" && search_value !== "") {
-        data[search_field] = search_value;
-      }
-      const user = await findData(data);
-
-      return res.json(user);
-    } catch (error) {
-      res.status(500).json({
-        status: "failure",
-        error: error.message,
-      });
-    }
-  },
-
-  // Save a new user
-  async store(req, res) {
-    try {
-      const usernameObj = await findUsername(req.body.username);
-      const emailObj = await findEmail(req.body.email);
-
-      if (usernameObj === null && emailObj === null) {
-        const user = await User.create(req.body);
-        return res.status(201).json({
-          status: "created",
-          data: user,
-        });
-      } else {
-        return res.status(400).json({
-          status: "failure",
-          error: "Was not possible to create a user",
-        });
-      }
-    } catch (error) {
-      res.status(500).json({
-        status: "failure",
-        error: error.message,
-      });
-    }
-  },
-
-  // >>> Login
+  //**************************//
+  //--------  Login ----------//
+  //**************************//
   login(req, res, next) {
     passport.authenticate("local-signin", (error, users, info) => {
       console.log(
@@ -192,15 +192,17 @@ module.exports = {
     })(req, res, next);
   },
 
-  // Update User
+  //**************************//
+  // ----- Update User ------ //                 ******EDIT******
+  //**************************//
   async update(req, res) {
-    console.log('UPDATE');
+    console.log("UPDATE");
     try {
-      console.log('UPDATE User');
+      console.log("UPDATE User");
       const user = await User.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
       });
-      
+
       user.password = undefined;
       if (user !== null) {
         return res.status(200).json({
@@ -223,9 +225,29 @@ module.exports = {
     }
   },
 
-  // Delete User
-  async destroy(req, res) {
-    await User.findByIdAndRemove(req.params.id);
-    return res.send();
+  //**************************//
+  // ----- Delete User ------ //                 ******EDIT******
+  //**************************//
+  async delete(req, res) {
+    try{
+      const user = await User.findByIdAndRemove(req.params.id);
+      console.log("DELETE ", user);
+      if(user !== null){
+        return res.send();
+      } else{
+        return res.status(404).send();
+      }
+    }catch (error) {
+      res.status(500).json({
+        status: "failure",
+        error: error.message,
+      })
+    }
   },
+
+  async show(req, res) {
+    const user = await User.findById({_id: req.query.userId});
+    return res.json(user);
+  }
+
 };
