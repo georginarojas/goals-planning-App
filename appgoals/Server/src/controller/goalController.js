@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const Goal = mongoose.model("Goal");
-const User = mongoose.model("User");
 
 module.exports = {
   async index(req, res) {

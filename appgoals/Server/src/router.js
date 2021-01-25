@@ -3,6 +3,8 @@ const router = express.Router();
 
 const UserControlller = require("./controller/userControlller");
 const GoalsController = require("./controller/goalController");
+const MissionController = require("./controller/missionController");
+const TaskListController = require("./controller/taskListController");
 
 
 router.get("/user", UserControlller.index);
@@ -29,5 +31,10 @@ router.post("/goals", GoalsController.store);
 
 router.delete('/remove', GoalsController.delete);
 
+// -------- Missions routes -------------//
+router.post("/missions", MissionController.store);
+
+// -------- TaskList routes -------------//
+router.post("/taskList", TaskListController.store);
 
 module.exports = router;
