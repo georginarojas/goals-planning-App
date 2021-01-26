@@ -211,7 +211,7 @@ module.exports = {
           message: "User updated",
         });
       } else {
-        return res.status(401).send({
+        return res.status(404).send({
           status: "failure",
           data: null,
           message: "User not found",
@@ -226,28 +226,60 @@ module.exports = {
   },
 
   //**************************//
-  // ----- Delete User ------ //                 ******EDIT******
+  // ----- Delete User ------ //
   //**************************//
   async delete(req, res) {
-    try{
+    try {
       const user = await User.findByIdAndRemove(req.params.id);
       console.log("DELETE ", user);
-      if(user !== null){
+      if (user !== null) {
         return res.send();
-      } else{
+      } else {
         return res.status(404).send();
       }
-    }catch (error) {
+    } catch (error) {
       res.status(500).json({
         status: "failure",
         error: error.message,
-      })
+      });
     }
   },
 
-  async show(req, res) {
-    const user = await User.findById({_id: req.query.userId});
-    return res.json(user);
-  }
-
+  async find(req, res) {
+    try {
+      const user = await User.findById(req.params.id);
+      if (user !== null) {
+        const userWhitGoals = await User.aggregate([
+          {
+            $match: { _id: mongoose.Types.ObjectId(req.params.id) },
+          },
+          {
+            $lookup: {
+              from: "goals",
+              localField: "_id",
+              foreignField: "userId",
+              as: "goals",
+            },
+          },
+        ]);
+        userWhitGoals[0].password = undefined;
+        console.log("USER GOALS ", userWhitGoals);
+        console.log("USER GOALS ", userWhitGoals[0].password);
+        return res.status(200).json({
+          status: "success",
+          data: userWhitGoals,
+        })
+      } else{
+        return res.status(404).json({
+          status: "failure",
+          data: null,
+        })
+      }
+    } catch (error) {
+      res.status(500).json({
+        status: "failure",
+        error: error.message,
+      });
+    }
+  },
 };

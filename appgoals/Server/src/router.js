@@ -15,25 +15,32 @@ router.post("/user", UserControlller.store);
 
 router.post("/login", UserControlller.login);
 
-router.get("/auth", UserControlller.veryfyJwt);
-router.get("/verify", authentication, UserControlller.show);
+router.get("/user/:id", authentication, UserControlller.find);
 
 router.put("/user/:id", UserControlller.update);
 router.delete("/user/:id", UserControlller.delete);
 
-// -------- Goals routes -------------//
-router.get("/goals", GoalsController.index);
-router.get("/findGoal", GoalsController.find);
-router.post("/goals", GoalsController.store);
+router.get("/auth", UserControlller.veryfyJwt);
 
-router.delete("/remove", GoalsController.delete);
+
+// -------- Goals routes -------------//
+router.get("/goal", GoalsController.index);
+router.get("/goal/:id", GoalsController.find);
+router.post("/goal", GoalsController.store);
+
+router.delete("/goal/:id", GoalsController.delete);
 
 // -------- Missions routes -------------//
-router.post("/missions", MissionController.store);
+router.get("/mission", MissionController.index);
+router.post("/mission", MissionController.store);
+
+router.get("/mission/:id", MissionController.find);
+
+router.delete("/mission/:id", MissionController.delete);
 
 // -------- TaskList routes -------------//
 router.get("/task", TaskController.index);
-router.post("/task", authentication,  TaskController.store);
+router.post("/task", authentication, TaskController.store);
 router.delete("/task/:id", TaskController.delete);
 
 module.exports = router;
