@@ -8,17 +8,7 @@ module.exports = {
   async index(req, res) {
     try {
       const task = await Task.find();
-      if (task !== null) {
-        return res.status(201).json({
-          status: "success",
-          data: task,
-        });
-      } else {
-        return res.status(400).json({
-          status: "failure",
-          data: null,
-        });
-      }
+      return res.status(200).json(task);
     } catch (error) {
       res.status(500).json({
         status: "failure",
@@ -54,20 +44,23 @@ module.exports = {
   //*********************//
   //------- Delete-------//
   //*********************//
-  async delete(req, res){
-    try{
+  async delete(req, res) {
+    try {
       const task = await Task.findByIdAndRemove(req.params.id);
-      if(task !== null) {
-        return res.send();
+      if (task !== null) {
+        return res.status(200).json({
+          status: "success",
+        });
       } else {
-        return res.status(404).send()
-      }  
+        return res.status(404).json({
+          status: "failure",
+        });
+      }
     } catch (error) {
       res.status(500).json({
         status: "failure",
         error: error.message,
-      })
+      });
     }
   },
-
 };

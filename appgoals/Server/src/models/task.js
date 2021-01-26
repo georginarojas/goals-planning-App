@@ -16,6 +16,7 @@ const TaskScheme = new mongoose.Schema(
     missionId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Mission",
+      required: true,
     },
   },
   { timestamps: true }
