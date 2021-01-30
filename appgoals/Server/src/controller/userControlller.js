@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const User = mongoose.model("User");
 
 const passport = require("passport");
-const jwtSecret = require("../config/jwtConfig");
+const jwtConfig = require("../config/jwtConfig");
 const jwt = require("jsonwebtoken");
 const { use } = require("../router");
 
@@ -169,11 +169,11 @@ module.exports = {
             } else {
               var user = await findEmail(req.body.username);
             }
-            console.log("USER LOGIN ", user);
+            // console.log("USER LOGIN ", user, jwtConfig.expiry);
             user.password = undefined;
             const id = user._id;
-            const token = jwt.sign({ id }, jwtSecret.secret, {
-              expiresIn: 60 * 60,
+            const token = jwt.sign({ id }, jwtConfig.secret, {
+              expiresIn: jwtConfig.expiry,
             });
             res.status(200).json({
               auth: true,
@@ -244,9 +244,12 @@ module.exports = {
       });
     }
   },
-
+  //*********************************************//
+  // ------- Find user (user loged) ------------//
+  //********************************************//
   async find(req, res) {
     try {
+      console.log(">>> FIND Controller ", req.params.id);
       const user = await User.findById(req.params.id);
       if (user !== null) {
         const userWhitGoals = await User.aggregate([
@@ -263,16 +266,30 @@ module.exports = {
           },
         ]);
         userWhitGoals[0].password = undefined;
+        const userInfo = {
+          _id: userWhitGoals[0]._id,
+          name: userWhitGoals[0].name,
+          username: userWhitGoals[0].username,
+          email: userWhitGoals[0].email,
+          gender: userWhitGoals[0].gender,
+          createdAt: userWhitGoals[0].createdAt,
+          birthdate: userWhitGoals[0].birthdate
+        };
         console.log("USER GOALS ", userWhitGoals);
-        console.log("USER GOALS ", userWhitGoals[0].password);
+        console.log("USER GOALS ", userInfo);
         return res.status(200).json({
           status: "success",
+          user: userInfo,
           data: userWhitGoals,
+          auth: true,
         })
       } else{
+        console.log("Find null")
         return res.status(404).json({
           status: "failure",
+          user: null,
           data: null,
+          auth: false,
         })
       }
     } catch (error) {
