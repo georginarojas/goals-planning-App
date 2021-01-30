@@ -6,6 +6,8 @@ import InputLogin from "../../components/login/input";
 import Header from "../../components/utils/header";
 import "../userRegister/form.scss";
 
+import {login} from "../../components/config/verifyAuth";
+
 class UserLogin extends Component {
   constructor(props) {
     super(props);
@@ -33,11 +35,12 @@ class UserLogin extends Component {
         username: value1,
         password: password,
       });
-      // console.log("RESPONSE ", response);
-      localStorage.setItem("JWT", response.data.token);
-      localStorage.setItem("Auth", true);
-      // localStorage.setItem("UserId", response.data.data._id);
-      localStorage.setItem("User", JSON.stringify(response.data.data));
+      console.log("LOGIn RESPONSE ", response);
+
+      // localStorage.setItem("JWT", response.data.token);
+      // localStorage.setItem("Auth", true);
+      // localStorage.setItem("User", JSON.stringify(response.data.data));
+
       return {
         error: false,
         data: response.data,
@@ -66,9 +69,12 @@ class UserLogin extends Component {
       this.clean(event);
     } else {
       this.setState({ isValidData: true, userId: response.data.data._id });
-      this.props.setContext({ auth: true, user: response.data.data });
-      // console.log("LOGIN ", response.data.data);
-      this.props.history.push('/home');
+      login(this.props, response.data.token, true, response.data.data);
+
+
+
+      // this.props.setContext({ auth: true, user: response.data.data });
+      // this.props.history.push('/home');
       // this.props.history.push("/home/" + response.data.data._id);
     }
   }
