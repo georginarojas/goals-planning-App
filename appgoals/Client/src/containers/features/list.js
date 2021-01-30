@@ -5,6 +5,8 @@ import ItemStats from "../../components/utils/itemStats";
 import AddItem from "../../components/features/list/addItem";
 import ItemsList from "../../components/features/list/itemList";
 import RadioPriority from "../../components/utils/radioPriority";
+import { isLogin, intervalTime } from "../../components/config/verifyAuth";
+
 
 class List extends Component {
   constructor(props) {
@@ -22,6 +24,19 @@ class List extends Component {
     this.completeItem = this.completeItem.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     // this.filterList = this.filterList.bind(this);
+  }
+
+  componentDidMount() {
+    let time = intervalTime(); // milliseconds
+    console.log("home props ", this.props, time);
+    this.timerId = setInterval(() => {
+      isLogin(this.props);
+    }, time);
+  }
+
+  componentWillUnmount() {
+    console.log("Home clearInterval");
+    clearInterval(this.timerId);
   }
 
   handleChange(e) {
@@ -91,30 +106,28 @@ class List extends Component {
     });
   }
 
-  
   // ----- SUBMIT LIST -------- //
-  handleSubmit(e){
+  handleSubmit(e) {
     e.preventDefault();
-    let { list, title} = this.state;
+    let { list, title } = this.state;
     let newList = this.filterList(list);
     console.log(">> FILTER list ", newList);
 
-    if(title === "" ){
-      console.log("error")
-    } else{
-      console.log("SUBMIT")
-
+    if (title === "") {
+      console.log("error");
+    } else {
+      console.log("SUBMIT");
     }
   }
 
   // ----- FILTER LIST -------- //
-  filterList= (list) =>{
-  let newList =  list.filter((curr) => {
+  filterList = (list) => {
+    let newList = list.filter((curr) => {
       return curr.item !== "";
     });
     console.log("FILTER ", newList);
     return newList;
-  }
+  };
 
   render() {
     let { list, percentDone, finished, priority } = this.state;

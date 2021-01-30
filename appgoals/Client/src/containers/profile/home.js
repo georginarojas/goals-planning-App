@@ -2,16 +2,34 @@ import React, { Component } from "react";
 import Header from "../../components/utils/header";
 import { withRouter } from "react-router-dom";
 
-import VerifyAuth from "../../components/config/verifyAuth";
+import { isLogin, intervalTime } from "../../components/config/verifyAuth";
+
 import Logout from "../../components/utils/logout";
 import Menu from "../../components/profile/home/menu";
 import Card from "../../components/profile/home/card";
 
 class HomeProfile extends Component {
+  constructor(props) {
+    super(props);
+  }
+  componentDidMount() {
+    let time = intervalTime(); // milliseconds
+    console.log("home props ", this.props, time);
+    this.timerId = setInterval(() => {
+      isLogin(this.props);
+    }, time);
+  }
+
+  componentWillUnmount() {
+    console.log("Home clearInterval");
+    clearInterval(this.timerId);
+  }
+
   render() {
+    console.log(">>> Home ", this.props);
+
     return (
       <div className="home">
-        <VerifyAuth props={this.props} />
         <Header />
 
         <div>
@@ -28,15 +46,15 @@ class HomeProfile extends Component {
           <section>
             <div id="card">
               <h3>Goals</h3>
-              <Card id={"card-goals"} name={"Goal"}/>
+              <Card id={"card-goals"} name={"Goal"} props={this.props} />
             </div>
             <div id="card">
               <h3>Tasks</h3>
-              <Card id={"card-tasks"} name={"Task"}/>
+              <Card id={"card-tasks"} name={"Task"} />
             </div>
             <div id="card">
               <h3>List</h3>
-              <Card id={"card-list"} name={"List"}/>
+              <Card id={"card-list"} name={"List"} />
             </div>
           </section>
         </main>

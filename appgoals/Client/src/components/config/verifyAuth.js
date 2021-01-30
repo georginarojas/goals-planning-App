@@ -65,9 +65,8 @@ export const logout = (props) => {
 
 export const intervalTime = () => {
   let oneMinute = 1000 * 60, // milliseconds
-      minutes = 1;
+    minutes = 1;
 
-  let time = oneMinute * minutes + 1000; 
+  let time = oneMinute * minutes + 1000;
   return time;
 };
-
