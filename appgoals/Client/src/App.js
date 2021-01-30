@@ -1,4 +1,5 @@
 import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
+import PrivateRoute from "./components/privateRoute/privateRoute";
 
 import Home from "./containers/wellcome-Test";
 import UserRegisterForm from "./containers/userRegister/form";
@@ -21,7 +22,14 @@ const App = (props) => (
         <Route path="/" exact={true} component={Home} />
         <Route path="/register" component={UserRegisterForm} />
 
+        {/* <Route path="/login" component={UserLogin} /> */}
+
         <ContextProvider>
+
+          <PrivateRoute path="/home" component={HomeProfile} />
+          <PrivateRoute path="/list" component={List} />
+
+
           <ProfileContext.Consumer>
             {({ auth, setContext }) => (
               <Route
@@ -33,7 +41,7 @@ const App = (props) => (
             )}
           </ProfileContext.Consumer>
 
-          <ProfileContext.Consumer>
+          {/* <ProfileContext.Consumer>
             {({ setContext, auth }) => (
               <Route
                 path="/home"
@@ -45,7 +53,7 @@ const App = (props) => (
                 )}
               />
             )}
-          </ProfileContext.Consumer>
+          </ProfileContext.Consumer> */}
 
           <ProfileContext.Consumer>
             {({ user, auth, setContext }) => (
@@ -79,7 +87,7 @@ const App = (props) => (
             )}
           </ProfileContext.Consumer>
 
-          <ProfileContext.Consumer>
+          {/* <ProfileContext.Consumer>
             {({ setContext }) => (
               <Route
                 path="/list"
@@ -87,7 +95,9 @@ const App = (props) => (
                 render={(props) => <List setContext={setContext} />}
               />
             )}
-          </ProfileContext.Consumer>
+          </ProfileContext.Consumer> */}
+
+
         </ContextProvider>
 
         <Route component={Error} />
