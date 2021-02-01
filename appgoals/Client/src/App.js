@@ -22,13 +22,13 @@ const App = (props) => (
         <Route path="/" exact={true} component={Home} />
         <Route path="/register" component={UserRegisterForm} />
 
-        {/* <Route path="/login" component={UserLogin} /> */}
 
         <ContextProvider>
 
-          <PrivateRoute path="/home" component={HomeProfile} />
-          <PrivateRoute path="/list" component={List} />
-
+          <PrivateRoute path="/home" exact component={HomeProfile} />
+          <PrivateRoute path="/list"exact component={List} />
+          <PrivateRoute path="/profile" exact component={Profile} />
+          <PrivateRoute path="/profile/edit" exact component={EditProfile} />
 
           <ProfileContext.Consumer>
             {({ auth, setContext }) => (
@@ -40,63 +40,6 @@ const App = (props) => (
               />
             )}
           </ProfileContext.Consumer>
-
-          {/* <ProfileContext.Consumer>
-            {({ setContext, auth }) => (
-              <Route
-                path="/home"
-                render={(props) => (
-                  <HomeProfile
-                    auth={auth}
-                    setContext={setContext}
-                  ></HomeProfile>
-                )}
-              />
-            )}
-          </ProfileContext.Consumer> */}
-
-          <ProfileContext.Consumer>
-            {({ user, auth, setContext }) => (
-              <Route
-                path="/profile"
-                exact
-                render={(props) => (
-                  <Profile
-                    auth={auth}
-                    user={user}
-                    setContext={setContext}
-                  ></Profile>
-                )}
-              />
-            )}
-          </ProfileContext.Consumer>
-
-          <ProfileContext.Consumer>
-            {({ user, auth, setContext }) => (
-              <Route
-                path="/profile/edit"
-                exact
-                render={(props) => (
-                  <EditProfile
-                    auth={auth}
-                    user={user}
-                    setContext={setContext}
-                  ></EditProfile>
-                )}
-              />
-            )}
-          </ProfileContext.Consumer>
-
-          {/* <ProfileContext.Consumer>
-            {({ setContext }) => (
-              <Route
-                path="/list"
-                exact
-                render={(props) => <List setContext={setContext} />}
-              />
-            )}
-          </ProfileContext.Consumer> */}
-
 
         </ContextProvider>
 

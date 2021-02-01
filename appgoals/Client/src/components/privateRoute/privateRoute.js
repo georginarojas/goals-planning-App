@@ -5,16 +5,24 @@ import ProfileContext from "../context/profileContext";
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <ProfileContext.Consumer>
-    {({ setContext }) => (
+    {({ setContext, auth, user }) => (
       <Route
         render={(props) =>
-          isLogin(null) ? <Component {...props} setContext={setContext}/> : <Redirect to="/login" />
+          isLogin(null) ? (
+            <Component
+              {...props}
+              setContext={setContext}
+              auth={auth}
+              user={user}
+            />
+          ) : (
+            <Redirect to="/login" />
+          )
         }
         {...rest}
       />
     )}
   </ProfileContext.Consumer>
 );
-
 
 export default PrivateRoute;
