@@ -3,12 +3,12 @@ import { withRouter } from "react-router-dom";
 
 import { format } from "date-fns";
 
-import VerifyAuth from "../../components/config/verifyAuth";
 import Header from "../../components/utils/header";
 import Logout from "../../components/utils/logout";
 import GoHome from "../../components/utils/goHome";
 import GoBack from "../../components/utils/goBack";
 import EditBtn from "../../components/utils/editBtn";
+import { isLogin, intervalTime } from "../../components/config/verifyAuth";
 
 import "../userRegister/form.scss";
 
@@ -23,6 +23,17 @@ class Profile extends Component {
   componentDidMount() {
     const user = JSON.parse(localStorage.getItem("User"));
     this.handleData(user.birthdate);
+
+    let time = intervalTime(); // milliseconds
+    console.log("home props ", this.props, time);
+    this.timerId = setInterval(() => {
+      isLogin(this.props);
+    }, time);
+  }
+
+  componentWillUnmount() {
+    console.log("Home clearInterval");
+    clearInterval(this.timerId);
   }
 
   handleData(data) {
@@ -40,7 +51,6 @@ class Profile extends Component {
 
     return (
       <div className="config-profile">
-        <VerifyAuth props={this.props} />
         <Header />
         <form>
           <h3>Profile</h3>
@@ -57,7 +67,7 @@ class Profile extends Component {
             </ul>
           </div>
           <div className="profile-editBtn">
-            <EditBtn url="/profile/edit" />
+            <EditBtn url={`/profile/${this.props.user._id}/edit`} />
           </div>
         </form>
 
@@ -67,7 +77,7 @@ class Profile extends Component {
           <Logout />
         </div>
         <div>
-          <GoHome />
+          <GoHome id={this.props.user._id}/>
         </div>
         <div>
           <GoBack />

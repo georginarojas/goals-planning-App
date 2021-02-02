@@ -15,7 +15,8 @@ class UserLogin extends Component {
     const auth = localStorage.getItem("Auth");
     // console.log("LOGIN AUTH ", auth);
     if (auth) {
-      this.props.history.push("/home");
+      let user = localStorage.getItem("User");
+      this.props.history.push("/home/" + user._id);
     }
 
     this.state = {

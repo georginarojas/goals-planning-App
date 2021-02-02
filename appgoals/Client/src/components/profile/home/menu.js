@@ -33,6 +33,7 @@ class Menu extends Component {
         <MenuBar
           handleMenu={this.handleMenu}
           menuVisibility={this.state.show}
+          id={this.props.id}
         />
       </div>
     );

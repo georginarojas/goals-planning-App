@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ProfileContext from "./profileContext";
 
+
 class ContextProvider extends Component {
   constructor(props) {
     super(props);

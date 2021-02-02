@@ -3,13 +3,13 @@ import api from "../../services/api";
 import { withRouter } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
-import VerifyAuth from "../../components/config/verifyAuth";
 import Header from "../../components/utils/header";
 import Logout from "../../components/utils/logout";
 import GoHome from "../../components/utils/goHome";
 import GoBack from "../../components/utils/goBack";
 import InputProfile from "../../components/profile/edit/input";
 import SelectRegister from "../../components/profile/edit/select";
+import { isLogin, intervalTime } from "../../components/config/verifyAuth";
 
 class EditProfile extends Component {
   constructor(props) {
@@ -22,6 +22,19 @@ class EditProfile extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleData = this.handleData.bind(this);
+  }
+
+  componentDidMount() {
+    let time = intervalTime(); // milliseconds
+    console.log("home props ", this.props, time);
+    this.timerId = setInterval(() => {
+      isLogin(this.props);
+    }, time);
+  }
+
+  componentWillUnmount() {
+    console.log("Home clearInterval");
+    clearInterval(this.timerId);
   }
 
   handleData(event) {
@@ -88,13 +101,11 @@ class EditProfile extends Component {
     });
   };
 
-  render() {
-    // const { name, birthdate, gender } = this.state;
+  render() { 
 
     return (
       <div className="edit-profile">
         <Header />
-        <VerifyAuth props={this.props} />
 
         <div>
           <form action="edit-user" method="put" onSubmit={this.handleSubmit}>
@@ -165,7 +176,7 @@ class EditProfile extends Component {
           <Logout />
         </div>
         <div>
-          <GoHome />
+          <GoHome id={this.props.user._id}/>
         </div>
         <div>
           <GoBack />

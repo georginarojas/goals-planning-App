@@ -14,20 +14,17 @@ class HomeProfile extends Component {
   }
   componentDidMount() {
     let time = intervalTime(); // milliseconds
-    console.log("home props ", this.props, time);
     this.timerId = setInterval(() => {
       isLogin(this.props);
     }, time);
   }
 
   componentWillUnmount() {
-    console.log("Home clearInterval");
     clearInterval(this.timerId);
   }
 
   render() {
-    console.log(">>> Home ", this.props);
-
+    console.log("**** HOME ", this.props.user);
     return (
       <div className="home">
         <Header />
@@ -36,7 +33,7 @@ class HomeProfile extends Component {
           <Logout />
         </div>
 
-        <Menu />
+        <Menu id={this.props.user._id}/>
 
         <main>
           <section>
@@ -47,14 +44,6 @@ class HomeProfile extends Component {
             <div id="card">
               <h3>Goals</h3>
               <Card id={"card-goals"} name={"Goal"} props={this.props} />
-            </div>
-            <div id="card">
-              <h3>Tasks</h3>
-              <Card id={"card-tasks"} name={"Task"} />
-            </div>
-            <div id="card">
-              <h3>List</h3>
-              <Card id={"card-list"} name={"List"} />
             </div>
           </section>
         </main>

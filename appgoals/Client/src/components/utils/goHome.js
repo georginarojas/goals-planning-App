@@ -5,9 +5,10 @@ import { faHome } from "@fortawesome/free-solid-svg-icons";
 
 class GoHome extends Component {
   render() {
+    const {id} = this.props;
     return (
       <div >
-        <Link to="/home">
+        <Link to={`/home/${id}`}>
           <button type="button" className="utils-button">
             <FontAwesomeIcon icon={faHome} color="blue" size="lg" />
           </button>

@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faAngleUp } from "@fortawesome/free-solid-svg-icons";
 
 import CardBar from "./cardBar";
-
 import "./card.css";
 
 class Card extends Component {
@@ -26,7 +25,6 @@ class Card extends Component {
   }
 
   render() {
-    // console.log("ID card ", this.props.id);
     var icon = faAngleDown;
     if (this.state.show) {
       icon = faAngleUp;

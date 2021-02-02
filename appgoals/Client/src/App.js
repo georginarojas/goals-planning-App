@@ -22,13 +22,7 @@ const App = (props) => (
         <Route path="/" exact={true} component={Home} />
         <Route path="/register" component={UserRegisterForm} />
 
-
         <ContextProvider>
-
-          <PrivateRoute path="/home" exact component={HomeProfile} />
-          <PrivateRoute path="/list"exact component={List} />
-          <PrivateRoute path="/profile" exact component={Profile} />
-          <PrivateRoute path="/profile/edit" exact component={EditProfile} />
 
           <ProfileContext.Consumer>
             {({ auth, setContext }) => (
@@ -41,6 +35,16 @@ const App = (props) => (
             )}
           </ProfileContext.Consumer>
 
+          <PrivateRoute path="/home/:id" exact component={HomeProfile} />
+          <PrivateRoute path="/profile/:id" exact component={Profile} />
+          <PrivateRoute
+            path="/profile/:id/edit"
+            exact
+            component={EditProfile}
+          />
+
+          <PrivateRoute path="/list" exact component={List} />
+          
         </ContextProvider>
 
         <Route component={Error} />
