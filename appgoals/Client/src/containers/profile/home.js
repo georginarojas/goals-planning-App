@@ -9,8 +9,8 @@ import {
 
 import Header from "../../components/utils/header";
 import Logout from "../../components/utils/logout";
-import Menu from "../../components/profile/home/menu";
-import Card from "../../components/profile/home/card";
+import Menu from "../../components/utils/menu/menu";
+import Card from "../../components/utils/card/card";
 
 class HomeProfile extends Component {
   constructor(props) {

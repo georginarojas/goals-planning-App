@@ -248,8 +248,8 @@ module.exports = {
   // ------- Find user (user loged) ------------//
   //********************************************//
   async find(req, res) {
+    console.log(">>> FIND Controller ", req);
     try {
-      console.log(">>> FIND Controller ", req.params.id);
       const user = await User.findById(req.params.id);
       if (user !== null) {
         const userWhitGoals = await User.aggregate([

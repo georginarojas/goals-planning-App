@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import api from "../../../services/api";
 
-class TitleGoal extends Component {
+class GetMissions extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -40,7 +40,6 @@ class TitleGoal extends Component {
         </li>
       );
     });
-    console.log("missionList ", missionList);
     return (
       <div>
         <h2>{this.state.title}</h2>
@@ -53,4 +52,4 @@ class TitleGoal extends Component {
   }
 }
 
-export default TitleGoal;
+export default GetMissions;
