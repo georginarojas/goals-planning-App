@@ -1,9 +1,13 @@
 import React, { Component } from "react";
-import Header from "../../components/utils/header";
 import { withRouter } from "react-router-dom";
 
-import { isLogin, intervalTime } from "../../components/config/verifyAuth";
+import {
+  isLogin,
+  intervalTime,
+  setContextAuth,
+} from "../../components/config/verifyAuth";
 
+import Header from "../../components/utils/header";
 import Logout from "../../components/utils/logout";
 import Menu from "../../components/profile/home/menu";
 import Card from "../../components/profile/home/card";
@@ -13,6 +17,8 @@ class HomeProfile extends Component {
     super(props);
   }
   componentDidMount() {
+    setContextAuth(this.props);
+
     let time = intervalTime(); // milliseconds
     this.timerId = setInterval(() => {
       isLogin(this.props);
@@ -24,7 +30,7 @@ class HomeProfile extends Component {
   }
 
   render() {
-    console.log("**** HOME ", this.props.user);
+    console.log("@@@@ HOME ", this.props);
     return (
       <div className="home">
         <Header />
@@ -33,7 +39,7 @@ class HomeProfile extends Component {
           <Logout />
         </div>
 
-        <Menu id={this.props.user._id}/>
+        <Menu id={this.props.user._id} />
 
         <main>
           <section>
@@ -43,7 +49,12 @@ class HomeProfile extends Component {
           <section>
             <div id="card">
               <h3>Goals</h3>
-              <Card id={"card-goals"} name={"Goal"} props={this.props} />
+              <Card
+                id={"card-goals"}
+                name={"Goal"}
+                user={this.props.user}
+                props={this.props}
+              />
             </div>
           </section>
         </main>

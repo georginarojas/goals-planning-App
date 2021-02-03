@@ -7,6 +7,8 @@ import UserLogin from "./containers/login/login";
 import HomeProfile from "./containers/profile/home";
 import Profile from "./containers/profile/profile";
 import EditProfile from "./containers/profile/edit";
+
+import Goal from "./containers/features/goal";
 import List from "./containers/features/list";
 
 import ProfileContext from "./components/context/profileContext";
@@ -23,7 +25,6 @@ const App = (props) => (
         <Route path="/register" component={UserRegisterForm} />
 
         <ContextProvider>
-
           <ProfileContext.Consumer>
             {({ auth, setContext }) => (
               <Route
@@ -43,8 +44,9 @@ const App = (props) => (
             component={EditProfile}
           />
 
+          <PrivateRoute path="/goal/:idGoal" exact component={Goal} />
+
           <PrivateRoute path="/list" exact component={List} />
-          
         </ContextProvider>
 
         <Route component={Error} />

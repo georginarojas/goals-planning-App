@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
+import RegisterGoal from "../../features/registerGoal";
 import EditBtn from "../../utils/editBtn";
 import "./card.css";
 
@@ -35,21 +34,18 @@ class CardBar extends Component {
   }
 
   render() {
-    console.log("Card bar ", this.state.title);
+    console.log("#### Card bar PROPS ", this.props);
     var visibility = "hide";
     if (this.props.visibility) {
       visibility = "show";
     }
     return (
       <div id={this.props.id} className={visibility}>
-        <input
-          placeholder={this.props.name + " " + "tittle"}
-          name="title"
-          onChange={this.handleChange}
+        <RegisterGoal
+          id={this.props.user._id}
+          name={this.props.name}
+          props={this.props}
         />
-        <button onClick={this.handleInput}>
-          <FontAwesomeIcon icon={faPlus} />
-        </button>
 
         <div className="cardBar-editBtn">
           <EditBtn url="/list" />

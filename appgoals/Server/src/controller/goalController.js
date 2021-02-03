@@ -59,6 +59,7 @@ module.exports = {
   async store(req, res) {
     try {
       const goal = await Goal.create(req.body);
+      console.log(">>>> GOAL STORE ", goal);
       if (goal !== null) {
         return res.status(201).json({
           status: "success",
@@ -70,7 +71,6 @@ module.exports = {
           data: null,
         });
       }
-      return res.json(goal);
     } catch (error) {
       res.status(500).json({
         status: "failure",

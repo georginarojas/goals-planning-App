@@ -26,11 +26,11 @@ export const login = (props, token, auth, user) => {
 // ----------- Confirm login -----------------//
 export const isLogin = (props) => {
   const jwt = localStorage.getItem("JWT");
+  console.log(">>> Is login ", props);
+
   if (jwt !== null) {
     const decodedJwt = jwt_decode(jwt);
-
     let currrentDate = new Date();
-    // console.log("Time expery ", decodedJwt.exp * 1000, currrentDate.getTime());
     if (decodedJwt.exp * 1000 < currrentDate.getTime()) {
       sessionExpired(props);
       return false;
@@ -70,8 +70,22 @@ export const logout = (props) => {
 // ----------- IntervalTime variables ------------//
 export const intervalTime = () => {
   let oneMinute = 1000 * 60, // milliseconds
-    minutes = 15;
+    minutes = 120;
 
   let time = oneMinute * minutes + 1000;
   return time;
+};
+
+// ----------- Set Context ------------//
+export const setContextAuth = (props) => {
+  console.log("SET CONTEXT AUTH ", props);
+  if (props !== null) {
+    let auth = localStorage.getItem("Auth"),
+      user = JSON.parse(localStorage.getItem("User"));
+    props.setContext({
+      auth: auth,
+      user: user,
+    });
+  }
+  return true;
 };
