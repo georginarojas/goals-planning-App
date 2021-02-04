@@ -84,41 +84,4 @@ class Item extends Component {
   }
 }
 
-//-------------------------
-
-// const Item = (props) => {
-//   const markDone = () => {
-//     let currentItem = props.item;
-//     props.completeItem(currentItem);
-//   };
-
-//   let name = props.item.item,
-//     isCompleted = props.item.completed;
-//   return (
-//     <li>
-//       <div>
-//         <span onClick={markDone}>
-//           <CheckButton isCheck={isCompleted} />
-//         </span>
-//         <span>
-//           <p>{name}</p>
-//         </span>
-//       </div>
-
-//       <DeleteItem
-//         item={props.item}
-//         list={props.list}
-//         idx={props.idx}
-//         updateList={props.updateList}
-//       />
-//       <PriorityBtn
-//         item={props.item}
-//         list={props.list}
-//         idx={props.idx}
-//         updateList={props.updateList}
-//       />
-//     </li>
-//   );
-// };
-
 export default Item;
