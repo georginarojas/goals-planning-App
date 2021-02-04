@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import api from "../../../services/api";
 
+import DeleteGoal from "./deleteGoal";
 import EditBtn from "../../utils/editBtn";
 
 class GetGoals extends Component {
@@ -9,9 +10,14 @@ class GetGoals extends Component {
     this.state = {
       goals: [],
     };
+    this.fetchData = this.fetchData.bind(this);
   }
 
-  async componentDidMount() {
+  componentDidMount() {
+    this.fetchData();
+  }
+
+  async fetchData() {
     let jwt = localStorage.getItem("JWT");
     try {
       let id = this.props.id;
@@ -19,7 +25,7 @@ class GetGoals extends Component {
         params: { id },
         headers: { Authorization: `JWT ${jwt}` },
       });
-    //   console.log("Response getgoals ", response.data.data[0].goals);
+        console.log("Response getgoals ", response.data.data[0].goals);
 
       if (response !== null) {
         let goals = response.data.data[0].goals;
@@ -40,6 +46,7 @@ class GetGoals extends Component {
         <li key={i + 1}>
           <p>{goal.title}</p>
           <EditBtn url={`/goal/${goal._id}`} />
+          <DeleteGoal idGoal={goal._id} update={this.fetchData} />
         </li>
       );
     });
