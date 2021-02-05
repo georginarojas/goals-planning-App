@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import api from "../../../services/api";
 
+import EditInputGoal from "../goal/editInput";
+
 class GetMissions extends Component {
   constructor(props) {
     super(props);
@@ -12,17 +14,14 @@ class GetMissions extends Component {
   }
   componentDidMount() {
     let idGoal = this.props.idGoal;
-    console.log("Title goal ", idGoal);
     this.fetchData(idGoal);
   }
 
   async fetchData(idGoal) {
     try {
       let response = await api.get(`/goal/${idGoal}`);
-      console.log("TITLE GOAL ", response.data.data[0]);
       let title = response.data.data[0].title;
       let missions = response.data.data[0].missions;
-      console.log("GOAL missions ", response.data.data[0].missions);
       this.setState({ title, missions });
     } catch (error) {
       let message = "Error: Server failed";
@@ -31,7 +30,7 @@ class GetMissions extends Component {
   }
 
   render() {
-    console.log("TITLE GOAL ", this.state.title, this.state.missions);
+    // console.log("TITLE GOAL ", this.state.title, this.state.missions);
     const { missions } = this.state;
     const missionList = missions.map((mission, i) => {
       return (
@@ -43,6 +42,7 @@ class GetMissions extends Component {
     return (
       <div>
         <h2>{this.state.title}</h2>
+        <EditInputGoal id={this.props.idGoal} updateTitle={this.fetchData} />
         <div>
           <h3>Missions: </h3>
           <ul>{missionList}</ul>
