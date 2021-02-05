@@ -28,6 +28,7 @@ router.get("/goal", GoalsController.index);
 router.get("/goal/:id", GoalsController.find);
 router.post("/goal", GoalsController.store);
 
+router.put("/goal/:id", GoalsController.update);
 router.delete("/goal/:id", GoalsController.delete);
 
 // -------- Missions routes -------------//

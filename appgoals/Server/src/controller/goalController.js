@@ -79,6 +79,36 @@ module.exports = {
     }
   },
 
+  //*******************************//
+  //------- Update goal -----------//
+  //*******************************//
+  async update(req, res) {
+    try {
+      console.log(">>> Update ", req.params.id, req.body);
+      const response = await Goal.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+      });
+      if (response !== null) {
+        return res.status(200).json({
+          status: "success",
+          data: response,
+          message: "Goal update",
+        });
+      } else {
+        return res.status(404).json({
+          status: "failure",
+          data: response,
+          message: "User not found",
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
+        status: "failure",
+        error: error.message,
+      });
+    }
+  },
+
   //*********************//
   //------- Delete-------//
   //*********************//
