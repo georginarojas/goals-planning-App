@@ -169,7 +169,6 @@ module.exports = {
             } else {
               var user = await findEmail(req.body.username);
             }
-            // console.log("USER LOGIN ", user, jwtConfig.expiry);
             user.password = undefined;
             const id = user._id;
             const token = jwt.sign({ id }, jwtConfig.secret, {
@@ -196,9 +195,7 @@ module.exports = {
   // ----- Update User ------ //                 ******EDIT******
   //**************************//
   async update(req, res) {
-    console.log("UPDATE");
     try {
-      console.log("UPDATE User");
       const user = await User.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
       });
@@ -231,7 +228,6 @@ module.exports = {
   async delete(req, res) {
     try {
       const user = await User.findByIdAndRemove(req.params.id);
-      console.log("DELETE ", user);
       if (user !== null) {
         return res.send();
       } else {
@@ -248,7 +244,6 @@ module.exports = {
   // ------- Find user (user loged) ------------//
   //********************************************//
   async find(req, res) {
-    console.log(">>> FIND Controller ", req);
     try {
       const user = await User.findById(req.params.id);
       if (user !== null) {

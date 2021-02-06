@@ -56,7 +56,7 @@ class Item extends Component {
               <input
                 type="text"
                 placeholder="new item"
-                name={"editItem"+this.props.idx}
+                name={"editItem" + this.props.idx}
                 onKeyPress={this.handleChange}
                 autoFocus
                 required

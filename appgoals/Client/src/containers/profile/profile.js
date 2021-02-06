@@ -7,7 +7,7 @@ import Header from "../../components/utils/header";
 import Logout from "../../components/utils/logout";
 import GoHome from "../../components/utils/goHome";
 import GoBack from "../../components/utils/goBack";
-import EditBtn from "../../components/utils/editBtn";
+import EditBtnLink from "../../components/utils/editBtnLink";
 import { isLogin, intervalTime } from "../../components/config/verifyAuth";
 
 import "../userRegister/form.scss";
@@ -67,7 +67,7 @@ class Profile extends Component {
             </ul>
           </div>
           <div className="profile-editBtn">
-            <EditBtn url={`/profile/${this.props.user._id}/edit`} />
+            <EditBtnLink url={`/profile/${this.props.user._id}/edit`} />
           </div>
         </form>
 

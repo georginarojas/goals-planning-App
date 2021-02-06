@@ -21,7 +21,6 @@ class RegisterGoal extends Component {
 
   async handleSubmit(e) {
     e.preventDefault();
-    console.log("Submit ", this.props, this.state.title);
     try {
       const response = await api.post("/goal", {
         title: this.state.title,
@@ -32,10 +31,7 @@ class RegisterGoal extends Component {
         let message = "New goal created with success";
         console.log("message ", message, response.data);
         console.log("message ", message, response.data.data);
-        this.props.props.props.history.push(
-          `/goal/${response.data.data._id}`
-        );
-        // this.props.props.props.props.history.push("/goal");
+        this.props.props.props.history.push(`/goal/${response.data.data._id}`);
       } else {
         let message = "Was not possible to create a goal";
         console.log(message);
@@ -46,7 +42,6 @@ class RegisterGoal extends Component {
   }
 
   render() {
-    console.log("Register goal ", this.props.props.props);
     return (
       <div>
         <input

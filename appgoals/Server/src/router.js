@@ -41,7 +41,7 @@ router.delete("/mission/:id", MissionController.delete);
 
 // -------- TaskList routes -------------//
 router.get("/task", TaskController.index);
-router.post("/task", authentication, TaskController.store);
+router.post("/task", TaskController.store);
 router.delete("/task/:id", TaskController.delete);
 
 module.exports = router;

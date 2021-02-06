@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import api from "../../../services/api";
 
 import DeleteGoal from "./deleteGoal";
-import EditBtn from "../../utils/editBtn";
+import EditBtnLink from "../../utils/editBtnLink";
 
 class GetGoals extends Component {
   constructor(props) {
@@ -45,7 +45,7 @@ class GetGoals extends Component {
       return (
         <li key={i + 1}>
           <p>{goal.title}</p>
-          <EditBtn url={`/goal/${goal._id}`} />
+          <EditBtnLink url={`/goal/${goal._id}`} />
           <DeleteGoal idGoal={goal._id} update={this.fetchData} />
         </li>
       );

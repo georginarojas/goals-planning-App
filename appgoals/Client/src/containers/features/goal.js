@@ -14,19 +14,16 @@ class Goal extends Component {
   }
   componentDidMount() {
     let time = intervalTime(); // milliseconds
-    console.log("Goal props ", this.props, time);
     this.timerId = setInterval(() => {
       isLogin(this.props);
     }, time);
   }
 
   componentWillUnmount() {
-    console.log("Goal clearInterval");
     clearInterval(this.timerId);
   }
 
   render() {
-    console.log("Goal ", this.props.match.params.idGoal);
     return (
       <div>
         <Header />
