@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import api from "../../../services/api";
 
 import EditInputGoal from "../goal/editInput";
+import EditBtnLink from "../../utils/editBtnLink";
 
 class GetMissions extends Component {
   constructor(props) {
@@ -32,10 +33,12 @@ class GetMissions extends Component {
   render() {
     // console.log("TITLE GOAL ", this.state.title, this.state.missions);
     const { missions } = this.state;
+
     const missionList = missions.map((mission, i) => {
       return (
         <li key={i + 1}>
           <p>{mission.title}</p>
+          <EditBtnLink url={`/mission/${mission._id}`} />
         </li>
       );
     });
