@@ -47,7 +47,6 @@ module.exports = {
   async find(req, res) {
     try {
       const mission = await Mission.findById(req.params.id);
-      console.log("MISSION REQ", mission);
       if (mission !== null) {
         const missionWithTasks = await Mission.aggregate([
           {
@@ -62,6 +61,10 @@ module.exports = {
             },
           },
         ]);
+        const tasks = missionWithTasks[0].tasks.map((task, i) => {
+          console.log("***** FIND MISSION WITH TASK ", task);
+        });
+        console.log(">>>> FIND MISSION WITH TASKS ", missionWithTasks[0].tasks);
         return res.status(200).json({
           status: "success",
           data: missionWithTasks,
@@ -84,15 +87,15 @@ module.exports = {
   //------- Delete-------//
   //*********************//
   async delete(req, res) {
-    try {
-      const mission = await Mission.findByIdAndRemove(req.params.id);
+    try {  
+      const mission =  await Mission.remove({ _id: req.params.id });
       if (mission !== null) {
         return res.status(200).json({
-            status: "success",
+          status: "success",
         });
       } else {
         return res.status(404).json({
-            status: "failure",
+          status: "failure",
         });
       }
     } catch (error) {
