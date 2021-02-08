@@ -7,7 +7,7 @@ import Header from "../../components/utils/header";
 import Logout from "../../components/utils/logout";
 import GoHome from "../../components/utils/goHome";
 import GoBack from "../../components/utils/goBack";
-import EditBtnLink from "../../components/utils/editBtnLink";
+import GoButton from "../../components/utils/goBtn";
 import { isLogin, intervalTime } from "../../components/config/verifyAuth";
 
 import "../userRegister/form.scss";
@@ -25,14 +25,12 @@ class Profile extends Component {
     this.handleData(user.birthdate);
 
     let time = intervalTime(); // milliseconds
-    console.log("home props ", this.props, time);
     this.timerId = setInterval(() => {
       isLogin(this.props);
     }, time);
   }
 
   componentWillUnmount() {
-    console.log("Home clearInterval");
     clearInterval(this.timerId);
   }
 
@@ -42,7 +40,6 @@ class Profile extends Component {
 
   render() {
     const { birthdate } = this.state;
-    console.log("Profile birthdate ", birthdate);
     if (birthdate !== "") {
       const value = birthdate.toString();
       var d = new Date(value);
@@ -67,7 +64,7 @@ class Profile extends Component {
             </ul>
           </div>
           <div className="profile-editBtn">
-            <EditBtnLink url={`/profile/${this.props.user._id}/edit`} />
+            <GoButton url={`/profile/${this.props.user._id}/edit`} />
           </div>
         </form>
 

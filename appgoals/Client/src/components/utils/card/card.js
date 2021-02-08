@@ -29,7 +29,6 @@ class Card extends Component {
     if (this.state.show) {
       icon = faAngleUp;
     }
-    console.log("+++ Card ", this.props);
     return (
       <div>
         <div>
@@ -42,7 +41,7 @@ class Card extends Component {
           visibility={this.state.show}
           id={this.props.id}
           name={this.props.name}
-          user={this.props.user}
+          dataId={this.props.dataId}
           props={this.props}
         />
       </div>

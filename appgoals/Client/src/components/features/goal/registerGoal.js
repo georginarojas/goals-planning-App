@@ -29,8 +29,6 @@ class RegisterGoal extends Component {
 
       if (response !== null) {
         let message = "New goal created with success";
-        console.log("message ", message, response.data);
-        console.log("message ", message, response.data.data);
         this.props.props.props.history.push(`/goal/${response.data.data._id}`);
       } else {
         let message = "Was not possible to create a goal";

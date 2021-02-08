@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import api from "../../../services/api";
 
 import DeleteGoal from "./deleteGoal";
-import EditBtnLink from "../../utils/editBtnLink";
+import GoButton from "../../utils/goBtn";
 
 class GetGoals extends Component {
   constructor(props) {
@@ -25,8 +25,6 @@ class GetGoals extends Component {
         params: { id },
         headers: { Authorization: `JWT ${jwt}` },
       });
-        console.log("Response getgoals ", response.data.data[0].goals);
-
       if (response !== null) {
         let goals = response.data.data[0].goals;
         this.setState({ goals });
@@ -45,7 +43,7 @@ class GetGoals extends Component {
       return (
         <li key={i + 1}>
           <p>{goal.title}</p>
-          <EditBtnLink url={`/goal/${goal._id}`} />
+          <GoButton url={`/goal/${goal._id}`} />
           <DeleteGoal idGoal={goal._id} update={this.fetchData} />
         </li>
       );

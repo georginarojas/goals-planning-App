@@ -5,16 +5,24 @@ import "./card.css";
 
 const CardBar = (props) => {
   console.log("Card bar ", props);
-  return (
-    <div >
-      <CardGoal
-        visibility={props.visibility}
-        id={props.id}
-        name={props.name}
-        user={props.user}
-        props={props.props}
-      />
-    </div>
-  );
+
+  const renderSwitch = (params) => {
+    switch (params) {
+      case "Goal":
+        return (
+          <CardGoal
+            visibility={props.visibility}
+            id={props.id}
+            name={props.name}
+            dataId={props.dataId}
+            props={props.props}
+          />
+        );
+      case "Mission":
+        return <h3>Test</h3>;
+    }
+  };
+
+  return <div>{renderSwitch(props.name)}</div>;
 };
 export default CardBar;

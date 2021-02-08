@@ -30,7 +30,6 @@ class HomeProfile extends Component {
   }
 
   render() {
-    console.log("@@@@ HOME ", this.props);
     return (
       <div className="home">
         <Header />
@@ -50,9 +49,9 @@ class HomeProfile extends Component {
             <div id="card">
               <h3>Goals</h3>
               <Card
-                id={"card-goals"}
+                id={"card-data"}
                 name={"Goal"}
-                user={this.props.user}
+                dataId={this.props.user._id}
                 props={this.props}
               />
             </div>

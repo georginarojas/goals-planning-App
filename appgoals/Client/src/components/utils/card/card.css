@@ -1,23 +1,24 @@
 #card{
     width: 70vw;
     height: 10vh;
-    background-color: #7dbbbd;
+    background-color: #42b0b4;
 }
 
 
 /* =============== Card bar =============== */
 
-#card-goals{
+#card-data{
     width: 70vw;
-    height: 70vh;
-    background-color: #7dbbbd;
+    height: 5vh;
+    background-color: #42b0b4;
 }
 
-#card-goals.hide{
+#card-data.hide{
     transform: translate(-100%);
 }
 
-#card-goals.show{
+#card-data.show{
+    height: 70vh;
     transform: translate3d(0, 0, 0);
     overflow: hidden;
 }
