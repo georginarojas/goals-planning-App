@@ -1,58 +1,30 @@
-import React, { Component } from "react";
-import api from "../../../services/api";
+import React from "react";
 
-import EditInputGoal from "../goal/editInput";
-import EditBtnLink from "../../utils/editBtnLink";
+import GoButton from "../../utils/goBtn";
+import DeleteMission from "./deleteMission";
 
-class GetMissions extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      title: null,
-      missions: [],
-    };
-    this.fetchData = this.fetchData.bind(this);
-  }
-  componentDidMount() {
-    let idGoal = this.props.idGoal;
-    this.fetchData(idGoal);
-  }
-
-  async fetchData(idGoal) {
-    try {
-      let response = await api.get(`/goal/${idGoal}`);
-      let title = response.data.data[0].title;
-      let missions = response.data.data[0].missions;
-      this.setState({ title, missions });
-    } catch (error) {
-      let message = "Error: Server failed";
-      console.log(message);
-    }
-  }
-
-  render() {
-    // console.log("TITLE GOAL ", this.state.title, this.state.missions);
-    const { missions } = this.state;
-
-    const missionList = missions.map((mission, i) => {
-      return (
-        <li key={i + 1}>
-          <p>{mission.title}</p>
-          <EditBtnLink url={`/mission/${mission._id}`} />
-        </li>
-      );
-    });
+const GetMissions = (props) => {
+  const missionList = props.missions.map((mission, i) => {
     return (
-      <div>
-        <h2>{this.state.title}</h2>
-        <EditInputGoal id={this.props.idGoal} updateTitle={this.fetchData} />
-        <div>
-          <h3>Missions: </h3>
-          <ul>{missionList}</ul>
+      <li key={i + 1}>
+        <div id="card">
+          <p>{mission.title}</p>
+          <GoButton url={`/mission/${mission._id}`} />
+          <DeleteMission
+            goalId={props.goalId}
+            missionId={mission._id}
+            updateData={props.updateData}
+          />
         </div>
-      </div>
+      </li>
     );
-  }
-}
+  });
+  return (
+    <div>
+      <h3>Missions: </h3>
+      <ul>{missionList}</ul>
+    </div>
+  );
+};
 
 export default GetMissions;
