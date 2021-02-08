@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const User = mongoose.model("User");
+const Goal = mongoose.model("Goal");
+const Mission = mongoose.model("Mission");
 
 const passport = require("passport");
 const jwtConfig = require("../config/jwtConfig");
@@ -23,6 +25,7 @@ async function findEmail(email) {
     return await User.findOne({ email }).exec();
   }
 }
+
 //------------------------------
 
 module.exports = {
@@ -90,7 +93,6 @@ module.exports = {
       console.log(
         ` >>>> CONTROLLER FIND error ${error}, , reqID ${req.query.userId} info ${info}`
       );
-      //userID ${user._id}
       if (error) {
         console.log("CONTROLLER show ", error);
         res.status(500).json({
@@ -108,7 +110,6 @@ module.exports = {
         // try {
         User.findById({ _id: req.query.userId }).then((userInfo) => {
           if (userInfo != null) {
-            console.log("User found Controller");
             userInfo.password = undefined;
             res.status(200).json({
               status: "success",
@@ -116,7 +117,6 @@ module.exports = {
               auth: true,
             });
           } else {
-            console.error("not user found");
             res.status(401).send({
               status: "failure",
               data: null,
@@ -125,15 +125,7 @@ module.exports = {
             });
           }
         });
-        // } catch (error) {
-        //   console.error("ERROR SERVER");
-        //   res.status(500).json({
-        //     status: "failure",
-        //     error: error.message,
-        //   });
-        // }
       } else {
-        console.error("jwt id do not match");
         res.status(403).send({
           status: "failure",
           message: "id and jwt token do not match",
@@ -148,9 +140,6 @@ module.exports = {
   //**************************//
   login(req, res, next) {
     passport.authenticate("local-signin", (error, users, info) => {
-      console.log(
-        `>>> Controller LOGIN errr ${error}, user  ${users}, info ${info}`
-      );
       if (error) {
         console.log(`>>>> Error ${error}`);
       }
@@ -222,24 +211,6 @@ module.exports = {
     }
   },
 
-  //**************************//
-  // ----- Delete User ------ //
-  //**************************//
-  async delete(req, res) {
-    try {
-      const user = await User.findByIdAndRemove(req.params.id);
-      if (user !== null) {
-        return res.send();
-      } else {
-        return res.status(404).send();
-      }
-    } catch (error) {
-      res.status(500).json({
-        status: "failure",
-        error: error.message,
-      });
-    }
-  },
   //*********************************************//
   // ------- Find user (user loged) ------------//
   //********************************************//
@@ -268,24 +239,46 @@ module.exports = {
           email: userWhitGoals[0].email,
           gender: userWhitGoals[0].gender,
           createdAt: userWhitGoals[0].createdAt,
-          birthdate: userWhitGoals[0].birthdate
+          birthdate: userWhitGoals[0].birthdate,
         };
-        console.log("USER GOALS ", userWhitGoals);
-        console.log("USER GOALS ", userInfo);
+
         return res.status(200).json({
           status: "success",
           user: userInfo,
           data: userWhitGoals,
           auth: true,
-        })
-      } else{
-        console.log("Find null")
+        });
+      } else {
         return res.status(404).json({
           status: "failure",
           user: null,
           data: null,
           auth: false,
-        })
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
+        status: "failure",
+        error: error.message,
+      });
+    }
+  },
+
+  //**************************//
+  // ----- Delete User ------ //
+  //**************************//
+  async delete(req, res) {
+    try {
+      const user = await User.remove({ _id: req.params.id });
+
+      if (user !== null) {
+        return res.status(201).json({
+          status: "success",
+        });
+      } else {
+        return res.status(404).json({
+          status: "failure",
+        });
       }
     } catch (error) {
       res.status(500).json({

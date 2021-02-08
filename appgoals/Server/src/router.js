@@ -15,7 +15,9 @@ router.post("/user", UserControlller.store);
 
 router.post("/login", UserControlller.login);
 
-router.get("/user/:id", authentication, UserControlller.find);
+// router.get("/user/:id", authentication, UserControlller.find);
+router.get("/user/:id", UserControlller.find);
+
 
 router.put("/user/:id", UserControlller.update);
 router.delete("/user/:id", UserControlller.delete);

@@ -46,7 +46,7 @@ module.exports = {
   //*********************//
   async delete(req, res) {
     try {
-      const task = await Task.findByIdAndRemove(req.params.id);
+      const task = await Task.remove({ _id: req.params.id });
       if (task !== null) {
         return res.status(200).json({
           status: "success",

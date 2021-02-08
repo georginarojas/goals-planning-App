@@ -87,8 +87,8 @@ module.exports = {
   //------- Delete-------//
   //*********************//
   async delete(req, res) {
-    try {  
-      const mission =  await Mission.remove({ _id: req.params.id });
+    try {
+      const mission = await Mission.remove({ _id: req.params.id });
       if (mission !== null) {
         return res.status(200).json({
           status: "success",

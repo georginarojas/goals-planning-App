@@ -1,6 +1,4 @@
 const mongoose = require("mongoose");
-const Task = require("./task");
-
 
 const MissionScheme = new mongoose.Schema(
   {
@@ -17,10 +15,20 @@ const MissionScheme = new mongoose.Schema(
   { timestamps: true }
 );
 
-MissionScheme.pre('remove',  { query: true, document: false }, async function(next){
-  const id= this._conditions._id;
-  await mongoose.model("Task").remove({ missionId: id}).exec();
-  next();
-});
+MissionScheme.pre(
+  "remove",
+  { query: true, document: false },
+  async function (next) {
+    const id = this._conditions._id;
+    const tasks = await mongoose.model("Task").find({ missionId: id });
+    tasks.map(async (task, i) => {
+      const response = await mongoose
+        .model("Task")
+        .remove({ _id: task._id })
+        .exec();
+    });
+    next();
+  }
+);
 
 mongoose.model("Mission", MissionScheme);

@@ -114,7 +114,7 @@ module.exports = {
   //*********************//
   async delete(req, res) {
     try {
-      const goal = await Goal.findByIdAndRemove(req.params.id);
+      const goal = await Goal.remove({ _id: req.params.id });
       if (goal !== null) {
         return res.status(200).json({
           status: "success",
