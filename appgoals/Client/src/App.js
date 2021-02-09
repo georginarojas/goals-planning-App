@@ -9,7 +9,7 @@ import Profile from "./containers/profile/profile";
 import EditProfile from "./containers/profile/edit";
 
 import Goal from "./containers/features/goal";
-import List from "./containers/features/list";
+import Mission from "./containers/features/mission";
 
 import ProfileContext from "./components/context/profileContext";
 import ContextProvider from "./components/context/contextProvider";
@@ -46,7 +46,7 @@ const App = (props) => (
 
           <PrivateRoute path="/goal/:idGoal" exact component={Goal} />
 
-          <PrivateRoute path="/mission/:id" exact component={List} />
+          <PrivateRoute path="/mission/:id" exact component={Mission} />
         </ContextProvider>
 
         <Route component={Error} />
