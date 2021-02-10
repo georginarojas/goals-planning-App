@@ -46,7 +46,7 @@ const App = (props) => (
 
           <PrivateRoute path="/goal/:idGoal" exact component={Goal} />
 
-          <PrivateRoute path="/mission/:id" exact component={Mission} />
+          <PrivateRoute path="/mission/:idMission" exact component={Mission} />
         </ContextProvider>
 
         <Route component={Error} />

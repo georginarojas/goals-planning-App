@@ -3,7 +3,8 @@ import api from "../../services/api";
 
 import { isLogin, intervalTime } from "../../components/config/verifyAuth";
 import Header from "../../components/utils/header";
-import GetTask from "../../components/features/task/getTasks";
+import GetTasks from "../../components/features/task/getTasks";
+import RegisterTask from "../../components/features/task/registerTask";
 
 class Mission extends Component {
   constructor(props) {
@@ -20,7 +21,7 @@ class Mission extends Component {
     this.timerId = setInterval(() => {
       isLogin(this.props);
     }, time);
-    let missionId = this.props.match.params.id;
+    let missionId = this.props.match.params.idMission;
     this.fetchData(missionId);
   }
 
@@ -36,18 +37,28 @@ class Mission extends Component {
         this.setState({ tasks: response.data.data[0].tasks });
       } else {
         let message = "Was not to load the mission";
+        console.log(message);
       }
     } catch (error) {
       let message = "Error: Server failed";
+      console.log(message);
     }
   }
 
   render() {
+    const user = JSON.parse(localStorage.getItem("User"));
+    const userId = user._id;
+
     return (
       <div>
         <Header />
         <h2>{this.state.title}</h2>
-        <GetTask tasks={this.state.tasks} />
+        <RegisterTask
+          userId={userId}
+          missionId={this.props.match.params.idMission}
+          updateData={this.fetchData}
+        />
+        <GetTasks tasks={this.state.tasks} />
       </div>
     );
   }
