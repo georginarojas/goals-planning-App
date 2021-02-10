@@ -1,11 +1,11 @@
 import React from "react";
 
-const GetTask = (props) => {
+const GetTasks = (props) => {
   const taskList = props.tasks.map((task, i) => {
     return (
       <li key={i + 1}>
         <div>
-          <p>{task.title}</p>
+          <p>{task.item}</p>
         </div>
       </li>
     );
@@ -17,4 +17,4 @@ const GetTask = (props) => {
     </div>
   );
 };
-export default GetTask;
+export default GetTasks;

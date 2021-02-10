@@ -20,6 +20,8 @@ const CardBar = (props) => {
         );
       case "Mission":
         return <h3>Test</h3>;
+      default:
+        return <h3>default</h3>;
     }
   };
 

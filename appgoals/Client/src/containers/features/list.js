@@ -7,7 +7,6 @@ import ItemsList from "../../components/features/list/itemList";
 import RadioPriority from "../../components/utils/radioPriority";
 import { isLogin, intervalTime } from "../../components/config/verifyAuth";
 
-
 class List extends Component {
   constructor(props) {
     super(props);

@@ -61,10 +61,7 @@ module.exports = {
             },
           },
         ]);
-        const tasks = missionWithTasks[0].tasks.map((task, i) => {
-          console.log("***** FIND MISSION WITH TASK ", task);
-        });
-        console.log(">>>> FIND MISSION WITH TASKS ", missionWithTasks[0].tasks);
+        console.log(">>>> FIND MISSION WITH TASKS ", missionWithTasks);
         return res.status(200).json({
           status: "success",
           data: missionWithTasks,

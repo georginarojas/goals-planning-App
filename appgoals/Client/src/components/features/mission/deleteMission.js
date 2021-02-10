@@ -15,13 +15,15 @@ class DeleteMission extends Component {
       const response = await api.delete(`/mission/${missionId}`);
       if (response.data.status === "success") {
         let message = "Delete with success";
-        console.log("Delete mission ", response.data.status);
         this.props.updateData(this.props.goalId);
+        console.log(message);
       } else {
         let message = "Was not possible delete the mission";
+        console.log(message);
       }
     } catch (error) {
       let message = "Error: Server failed";
+      console.log(message);
     }
   }
 

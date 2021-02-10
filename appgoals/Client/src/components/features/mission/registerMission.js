@@ -30,13 +30,16 @@ class RegisterMission extends Component {
         let missionId = response.data.data._id;
         if (response.data !== null) {
           let message = "Mission created with success";
+          console.log(message);
           this.props.updateTitle(this.props.goalId);
           this.props.props.history.push(`/mission/${missionId}`);
         } else {
           let message = "Was not possible created the mission";
+          console.log(message);
         }
       } catch (error) {
         let message = "Error: Server failed";
+        console.log(message);
       }
     }
   }

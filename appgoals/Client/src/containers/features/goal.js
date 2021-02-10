@@ -57,6 +57,7 @@ class Goal extends Component {
           userId={userId}
           goalId={this.props.match.params.idGoal}
           updateTitle={this.fetchData}
+          props={this.props}
         />
         <GetMissions
           missions={this.state.missions}
