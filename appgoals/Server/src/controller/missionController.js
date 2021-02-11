@@ -80,6 +80,33 @@ module.exports = {
     }
   },
 
+  //*******************************//
+  //------- Update mission --------//
+  //*******************************//
+  async update(req, res) {
+    try {
+      const mission = await Mission.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+      });
+      if (mission !== null) {
+        return res.status(201).json({
+          status: "success",
+          data: mission,
+        });
+      } else {
+        return res.status(401).json({
+          status: "failure",
+          data: null,
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
+        status: "failure",
+        error: error.message,
+      });
+    }
+  },
+
   //*********************//
   //------- Delete-------//
   //*********************//

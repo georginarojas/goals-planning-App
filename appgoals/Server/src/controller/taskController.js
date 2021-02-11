@@ -41,6 +41,31 @@ module.exports = {
       });
     }
   },
+
+  async update(req, res) {
+    try {
+      const task = await Task.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+      });
+      if (task !== null) {
+        return res.status(201).json({
+          status: "success",
+          data: task,
+        });
+      } else {
+        return res.status(401).json({
+          status: "failure",
+          data: null,
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
+        status: "failure",
+        error: error.message,
+      });
+    }
+  },
+
   //*********************//
   //------- Delete-------//
   //*********************//

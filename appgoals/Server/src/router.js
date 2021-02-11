@@ -39,11 +39,13 @@ router.post("/mission", MissionController.store);
 
 router.get("/mission/:id", MissionController.find);
 
+router.put("/mission/:id", MissionController.update);
 router.delete("/mission/:id", MissionController.delete);
 
 // -------- TaskList routes -------------//
 router.get("/task", TaskController.index);
 router.post("/task", TaskController.store);
+router.put("task/:id", TaskController.update);
 router.delete("/task/:id", TaskController.delete);
 
 module.exports = router;
