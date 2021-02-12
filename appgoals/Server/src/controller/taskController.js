@@ -53,7 +53,7 @@ module.exports = {
           data: task,
         });
       } else {
-        return res.status(401).json({
+        return res.status(404).json({
           status: "failure",
           data: null,
         });

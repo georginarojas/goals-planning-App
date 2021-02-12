@@ -7,7 +7,7 @@ import Header from "../../components/utils/header";
 import RegisterTask from "../../components/features/task/registerTask";
 import ItemStats from "../../components/utils/itemStats";
 
-import ItemsList from "../../components/features/list/itemList";
+import TasksList from "../../components/features/task/tasksList";
 import EditInputMission from "../../components/features/mission/editInput";
 
 class Mission extends Component {
@@ -22,8 +22,8 @@ class Mission extends Component {
     this.fetchData = this.fetchData.bind(this);
 
     this.completedTask = this.completedTask.bind(this);
-    this.updateList = this.updateList.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.updateTaskList = this.updateTaskList.bind(this);
+    this.handleSubmitTask = this.handleSubmitTask.bind(this);
   }
 
   componentDidMount() {
@@ -78,24 +78,41 @@ class Mission extends Component {
 
   completedTask(currentTask) {
     let list = this.state.tasks;
-    console.log("AAAAAA ", currentTask, list);
     for (let i = 0; i < list.length; i++) {
       if (list[i]._id === currentTask) {
         list[i].completed = !list[i].completed;
-        console.log("BBBBB ", list[i]);
         break;
       }
     }
     this.setState({ tasks: list });
   }
 
-  updateList(list) {
+  updateTaskList(list) {
     this.setState({ tasks: list });
   }
 
-  handleSubmit(e) {
+   handleSubmitTask(e) {
     let list = this.state.tasks;
     console.log("LIST ", list);
+    list.map(async (task, i) => {
+      try {
+        console.log(">>> TASK ", task)
+        const response = await api.put(`/task/${task._id}`, {
+          item: task.item,
+          priority: task.priority,
+          completed: task.completed,
+        });
+        if (response.data !== null) {
+          let message = "Update with success";
+          console.log(message, i);
+        } else {
+          let message = "Was not possible the update task";
+          console.log(message, i);
+        }
+      } catch (error) {
+      console.log(error);
+      }
+    });
   }
 
   //-----------------------------------
@@ -104,7 +121,6 @@ class Mission extends Component {
     const user = JSON.parse(localStorage.getItem("User"));
     const userId = user._id;
     const { tasks, percentDone, finished } = this.state;
-    console.log("****** MISSION ", tasks);
     return (
       <div>
         <Header />
@@ -120,16 +136,15 @@ class Mission extends Component {
           updateData={this.fetchData}
         />
 
-        <ItemsList
-          items={tasks}
-          updateList={this.updateList}
-          completeItem={this.completedTask}
+        <TasksList
+          tasks={tasks}
+          updateTaskList={this.updateTaskList}
+          completeTask={this.completedTask}
+          updateData={this.fetchData}
         />
-        <button type="submit" onClick={this.handleSubmit}>
+        <button type="submit" onClick={this.handleSubmitTask}>
           Save
         </button>
-
-        {/* <TasksList tasks={tasks} updateData={this.fetchData} /> */}
       </div>
     );
   }
