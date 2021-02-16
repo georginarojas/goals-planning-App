@@ -10,6 +10,10 @@ import ItemStats from "../../components/utils/itemStats";
 import TasksList from "../../components/features/task/tasksList";
 import EditInputMission from "../../components/features/mission/editInput";
 
+import GoHome from "../../components/utils/goHome";
+import GoBack from "../../components/utils/goBack";
+import Logout from "../../components/utils/logout";
+
 class Mission extends Component {
   constructor(props) {
     super(props);
@@ -124,6 +128,9 @@ class Mission extends Component {
     return (
       <div>
         <Header />
+        <GoBack />
+        <GoHome id={userId} />
+        <Logout />
         <h2>{this.state.title}</h2>
         <EditInputMission
           id={this.props.match.params.idMission}

@@ -4,8 +4,6 @@ import CardGoal from "../../features/goal/cardGoal";
 import "./card.css";
 
 const CardBar = (props) => {
-  console.log("Card bar ", props);
-
   const renderSwitch = (params) => {
     switch (params) {
       case "Goal":

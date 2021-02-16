@@ -24,7 +24,7 @@ class RegisterGoal extends Component {
     try {
       const response = await api.post("/goal", {
         title: this.state.title,
-        userId: this.props.id,
+        userId: this.props.props.props.match.params.id,
       });
 
       if (response !== null) {

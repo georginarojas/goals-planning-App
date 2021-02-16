@@ -1,7 +1,7 @@
 import React from "react";
 
 import RegisterGoal from "./registerGoal";
-import GetGoals from "./getGoals";
+import GoalsList from "./goalsList";
 import "../../utils/card/card.css";
 
 const CardGoal = (props) => {
@@ -11,12 +11,8 @@ const CardGoal = (props) => {
   }
   return (
     <div id={props.id} className={visibility}>
-      <RegisterGoal
-        id={props.dataId}
-        name={props.name}
-        props={props.props}
-      />
-      <GetGoals id={props.dataId} />
+      <RegisterGoal id={props.dataId} name={props.name} props={props.props} />
+      <GoalsList id={props.dataId} props={props.props} />
     </div>
   );
 };

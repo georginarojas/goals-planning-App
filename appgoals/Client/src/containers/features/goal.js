@@ -3,10 +3,14 @@ import api from "../../services/api";
 
 import { isLogin, intervalTime } from "../../components/config/verifyAuth";
 import Header from "../../components/utils/header";
-import GetMissions from "../../components/features/mission/getMissions";
+import MissionsList from "../../components/features/mission/missionsList";
 import EditInputGoal from "../../components/features/goal/editInput";
 
 import RegisterMission from "../../components/features/mission/registerMission";
+
+import GoHome from "../../components/utils/goHome";
+import GoBack from "../../components/utils/goBack";
+import Logout from "../../components/utils/logout";
 
 class Goal extends Component {
   constructor(props) {
@@ -48,6 +52,10 @@ class Goal extends Component {
     return (
       <div>
         <Header />
+        <GoBack />
+        <GoHome id={userId} />
+        <Logout />
+
         <h2>{this.state.title}</h2>
         <EditInputGoal
           id={this.props.match.params.idGoal}
@@ -59,7 +67,7 @@ class Goal extends Component {
           updateTitle={this.fetchData}
           props={this.props}
         />
-        <GetMissions
+        <MissionsList
           missions={this.state.missions}
           goalId={this.props.match.params.idGoal}
           updateData={this.fetchData}

@@ -13,9 +13,6 @@ import Menu from "../../components/utils/menu/menu";
 import Card from "../../components/utils/card/card";
 
 class HomeProfile extends Component {
-  constructor(props) {
-    super(props);
-  }
   componentDidMount() {
     setContextAuth(this.props);
 
