@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {faSignOutAlt} from "@fortawesome/free-solid-svg-icons";
 
 class Logout extends Component {
   constructor(props) {
@@ -23,7 +25,7 @@ class Logout extends Component {
     return (
       <div>
         <button onClick={this.logout} className="button-logout">
-          Logout
+          <FontAwesomeIcon icon={faSignOutAlt} />
         </button>
       </div>
     );
